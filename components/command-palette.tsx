@@ -35,28 +35,19 @@ export default function CommandPalette({ navigation }: { navigation: any }) {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full"
+        className="rounded-full w-10 h-10"
         onClick={() => setIsOpen(true)}
         aria-label="Command palette"
       >
-        <Command className="h-4 w-4" />
+        <Command className="h-5 w-5" />
       </Button>
 
-      <Transition.Root show={isOpen} as={Fragment} afterLeave={() => setQuery("")}>
-        <Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20" onClose={setIsOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500/25 backdrop-blur-sm transition-opacity dark:bg-gray-900/50" />
-          </Transition.Child>
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-gray-500/25 backdrop-blur-sm transition-opacity dark:bg-gray-900/50" aria-hidden="true" />
 
-          <Transition.Child
+        <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
+          <Transition
+            show={isOpen}
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -65,88 +56,86 @@ export default function CommandPalette({ navigation }: { navigation: any }) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Combobox
-              as="div"
-              className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10"
-              onChange={(page: any) => {
+            <Dialog.Panel className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10">
+              <Combobox onChange={(page: any) => {
                 setIsOpen(false)
                 router.push(page.href)
-              }}
-            >
-              <div className="relative">
-                <Search
-                  className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400 dark:text-gray-500"
-                  aria-hidden="true"
-                />
-                <Combobox.Input
-                  className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 dark:text-gray-200 dark:placeholder-gray-500 sm:text-sm"
-                  placeholder="Search..."
-                  onChange={(event) => setQuery(event.target.value)}
-                />
-              </div>
+              }}>
+                <div className="relative">
+                  <Search
+                    className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400 dark:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  <Combobox.Input
+                    className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 dark:text-gray-200 dark:placeholder-gray-500 sm:text-sm"
+                    placeholder="Search..."
+                    onChange={(event) => setQuery(event.target.value)}
+                  />
+                </div>
 
-              {filteredPages.length > 0 && (
-                <Combobox.Options static className="max-h-96 scroll-py-3 overflow-y-auto p-3">
-                  {filteredPages.map((page: any) => (
-                    <Combobox.Option
-                      key={page.href}
-                      value={page}
-                      className={({ active }) =>
-                        cn(
-                          "flex cursor-default select-none rounded-xl p-3",
-                          active ? "bg-gray-100 dark:bg-gray-700" : "",
-                        )
-                      }
-                    >
-                      {({ active }) => {
-                        const IconComponent = page.icon
-                        return (
-                          <>
-                            <div
-                              className={cn(
-                                "flex h-10 w-10 flex-none items-center justify-center rounded-lg",
-                                active ? "bg-gray-800 dark:bg-gray-700" : "bg-gray-500 dark:bg-gray-600",
-                              )}
-                            >
-                              {IconComponent && <IconComponent className="h-6 w-6 text-white" aria-hidden="true" />}
-                            </div>
-                            <div className="ml-4 flex-auto">
-                              <p
+                {filteredPages.length > 0 && (
+                  <Combobox.Options static className="max-h-96 scroll-py-3 overflow-y-auto p-3">
+                    {filteredPages.map((page: any) => (
+                      <Combobox.Option
+                        key={page.href}
+                        value={page}
+                        className={({ active }) =>
+                          cn(
+                            "flex cursor-default select-none rounded-xl p-3",
+                            active ? "bg-gray-100 dark:bg-gray-700" : "",
+                          )
+                        }
+                      >
+                        {({ active }) => {
+                          const IconComponent = page.icon
+                          return (
+                            <>
+                              <div
                                 className={cn(
-                                  "text-sm font-medium",
-                                  active ? "text-gray-900 dark:text-gray-100" : "text-gray-700 dark:text-gray-400",
+                                  "flex h-10 w-10 flex-none items-center justify-center rounded-lg",
+                                  active ? "bg-gray-800 dark:bg-gray-700" : "bg-gray-500 dark:bg-gray-600",
                                 )}
                               >
-                                {page.name}
-                              </p>
-                              {page.description && (
+                                {IconComponent && <IconComponent className="h-6 w-6 text-white" aria-hidden="true" />}
+                              </div>
+                              <div className="ml-4 flex-auto">
                                 <p
                                   className={cn(
-                                    "text-sm",
-                                    active ? "text-gray-500 dark:text-gray-400" : "text-gray-400 dark:text-gray-500",
+                                    "text-sm font-medium",
+                                    active ? "text-gray-900 dark:text-gray-100" : "text-gray-700 dark:text-gray-400",
                                   )}
                                 >
-                                  {page.description}
+                                  {page.name}
                                 </p>
-                              )}
-                            </div>
-                          </>
-                        )
-                      }}
-                    </Combobox.Option>
-                  ))}
-                </Combobox.Options>
-              )}
+                                {page.description && (
+                                  <p
+                                    className={cn(
+                                      "text-sm",
+                                      active ? "text-gray-500 dark:text-gray-400" : "text-gray-400 dark:text-gray-500",
+                                    )}
+                                  >
+                                    {page.description}
+                                  </p>
+                                )}
+                              </div>
+                            </>
+                          )
+                        }}
+                      </Combobox.Option>
+                    ))}
+                  </Combobox.Options>
+                )}
 
-              {query !== "" && filteredPages.length === 0 && (
-                <div className="px-6 py-14 text-center text-sm sm:px-14">
-                  <p className="text-gray-500 dark:text-gray-400">No pages found.</p>
-                </div>
-              )}
-            </Combobox>
-          </Transition.Child>
-        </Dialog>
-      </Transition.Root>
+                {query !== "" && filteredPages.length === 0 && (
+                  <div className="px-6 py-14 text-center text-sm sm:px-14">
+                    <p className="text-gray-500 dark:text-gray-400">No pages found.</p>
+                  </div>
+                )}
+              </Combobox>
+            </Dialog.Panel>
+          </Transition>
+        </div>
+      </Dialog>
     </>
   )
 }

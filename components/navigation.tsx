@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { MoonIcon, SunIcon, Languages } from "lucide-react"
+import { MoonIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 import CommandPalette from "@/components/command-palette"
 import { navigation } from "@/data/nav"
@@ -32,7 +32,7 @@ export default function Navigation() {
           </div>
         </Link>
       </div>
-      <div className="flex items-center text-base leading-5">
+      <div className="flex items-center text-base leading-5 space-x-2">
         <div className="hidden sm:block">
           {headerNavLinks.map((link) => (
             <Link
@@ -46,21 +46,20 @@ export default function Navigation() {
             </Link>
           ))}
         </div>
-        <CommandPalette navigation={navigation} />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label="Toggle theme"
-        >
-          <SunIcon className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full" aria-label="Language">
-          <Languages className="h-4 w-4" />
-        </Button>
-        <DropMenu />
+        <div className="flex items-center space-x-2">
+          <CommandPalette navigation={navigation} />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full w-10 h-10"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label="Toggle theme"
+          >
+            <SunIcon className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <MoonIcon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+          <DropMenu />
+        </div>
       </div>
     </header>
   )

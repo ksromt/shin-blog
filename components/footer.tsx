@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="mb-2 hidden text-sm text-muted-foreground md:flex">
           <div className="mx-1">
             <Link href="/" className="hover:underline">
-              Your Name{` © ${new Date().getFullYear()}`}
+              Yuanxin Tu{` © ${new Date().getFullYear()}`}
             </Link>
           </div>
           {`•`}
