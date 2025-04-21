@@ -2,7 +2,7 @@ const siteMetadata = {
   title: "~/blog | Personal Blog",
   author: "Your Name",
   headerTitle: "~/blog",
-  description: "A personal blog about technology, programming, and more",
+  description: "My personal blog",
   language: "en-us",
   theme: "system",
   siteUrl: "https://yourblog.com",

@@ -1,15 +1,31 @@
+/** @jsxImportSource react */
+import React from 'react'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { RoughNotation } from 'react-rough-notation'
+import siteMetadata from '@/data/siteMetadata'
 
 export default function HomePage() {
   return (
     <div className="space-y-8">
       <section className="space-y-4">
-        <h1 className="text-4xl font-bold">Welcome to my blog</h1>
-        <p className="text-xl text-muted-foreground">
-          A personal space.
-        </p>
+      <h1 className="pb-6 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+              This is{' '}
+              <span className="text-primary-500 dark:text-primary-dark-500">Shin</span>
+            </h1>
+            <h2 className="prose pt-5 text-lg text-gray-600 dark:text-gray-300">
+              {`Welcome to ${siteMetadata.description}. I am a Graduate student in Computer Science at Keio University. `}
+              In my free time, I like developing side projects and learning new technologies.
+            </h2>
+            <p className="pt-5 text-lg leading-7 text-slate-600 dark:text-slate-300 hidden sm:block">
+              This is my place for{' '}
+              <span className="relative inline-block">
+                <span className="absolute inset-0 bg-primary-500/20 rounded-md animate-pulse"></span>
+                <span className="relative">thoughts, reflections & everything&nbsp;</span>
+              </span>
+              in between. Have a good read!
+            </p>
         <div className="flex gap-4">
           <Button asChild>
             <Link href="/blog">
