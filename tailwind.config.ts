@@ -31,7 +31,7 @@ const config = {
           100: '#FDD1D9',
           200: '#FBA4BC',
           300: '#F575A5',
-          400: '#EB519B',
+          400: '#F472B6',
           500: '#DE1D8D',
           600: '#BE1588',
           700: '#9F0E7F',
@@ -42,7 +42,7 @@ const config = {
           100: '#FDD1D9',
           200: '#FBA4BC',
           300: '#F575A5',
-          400: '#EB519B',
+          400: '#F472B6',
           500: '#DE1D8D',
           600: '#BE1588',
           700: '#9F0E7F',
@@ -78,6 +78,15 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        tilt: {
+          '0%, 100%': { transform: 'rotate(-1deg)' },
+          '50%': { transform: 'rotate(1deg)' },
+        },
+      },
+      animation: {
+        tilt: 'tilt 10s infinite linear',
       },
       typography: {
         DEFAULT: {
