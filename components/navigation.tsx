@@ -32,8 +32,8 @@ export default function Navigation() {
           </div>
         </Link>
       </div>
-      <div className="flex items-center text-base leading-5 space-x-2">
-        <div className="hidden sm:block">
+      <div className="flex items-center text-base leading-5">
+        <div className="hidden sm:block mr-4">
           {headerNavLinks.map((link) => (
             <Link
               key={link.title}

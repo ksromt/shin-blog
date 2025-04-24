@@ -1,6 +1,6 @@
 "use client"
 
-import { Dialog, Combobox, Transition } from "@headlessui/react"
+import { Dialog, Transition } from "@headlessui/react"
 import { useState, useEffect, Fragment } from "react"
 import { Search, Command } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -42,31 +42,37 @@ export default function CommandPalette({ navigation }: { navigation: any }) {
         <Command className="h-5 w-5" />
       </Button>
 
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        <div className="fixed inset-0 bg-gray-500/25 backdrop-blur-sm transition-opacity dark:bg-gray-900/50" aria-hidden="true" />
-
-        <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
-          <Transition
-            show={isOpen}
+      <Transition show={isOpen} as={Fragment}>
+        <Dialog className="relative z-50" onClose={() => setIsOpen(false)}>
+          <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
             leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            <Dialog.Panel className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10">
-              <Combobox onChange={(page: any) => {
-                setIsOpen(false)
-                router.push(page.href)
-              }}>
+            <div className="fixed inset-0 bg-gray-500/25 backdrop-blur-sm transition-opacity dark:bg-gray-900/50" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all dark:divide-gray-700 dark:bg-gray-800 dark:ring-white/10">
                 <div className="relative">
                   <Search
                     className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400 dark:text-gray-500"
                     aria-hidden="true"
                   />
-                  <Combobox.Input
+                  <input
                     className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 dark:text-gray-200 dark:placeholder-gray-500 sm:text-sm"
                     placeholder="Search..."
                     onChange={(event) => setQuery(event.target.value)}
@@ -74,56 +80,53 @@ export default function CommandPalette({ navigation }: { navigation: any }) {
                 </div>
 
                 {filteredPages.length > 0 && (
-                  <Combobox.Options static className="max-h-96 scroll-py-3 overflow-y-auto p-3">
-                    {filteredPages.map((page: any) => (
-                      <Combobox.Option
-                        key={page.href}
-                        value={page}
-                        className={({ active }) =>
-                          cn(
-                            "flex cursor-default select-none rounded-xl p-3",
-                            active ? "bg-gray-100 dark:bg-gray-700" : "",
-                          )
-                        }
-                      >
-                        {({ active }) => {
-                          const IconComponent = page.icon
-                          return (
-                            <>
-                              <div
+                  <div className="max-h-96 scroll-py-3 overflow-y-auto p-3">
+                    {filteredPages.map((page: any) => {
+                      const IconComponent = page.icon
+                      return (
+                        <button
+                          key={page.href}
+                          className={cn(
+                            "flex w-full cursor-default select-none items-center rounded-xl p-3",
+                            "hover:bg-gray-100 dark:hover:bg-gray-700"
+                          )}
+                          onClick={() => {
+                            setIsOpen(false)
+                            router.push(page.href)
+                          }}
+                        >
+                          <div
+                            className={cn(
+                              "flex h-10 w-10 flex-none items-center justify-center rounded-lg",
+                              "bg-gray-500 dark:bg-gray-600"
+                            )}
+                          >
+                            {IconComponent && <IconComponent className="h-6 w-6 text-white" aria-hidden="true" />}
+                          </div>
+                          <div className="ml-4 flex-auto">
+                            <p
+                              className={cn(
+                                "text-sm font-medium",
+                                "text-gray-700 dark:text-gray-400"
+                              )}
+                            >
+                              {page.name}
+                            </p>
+                            {page.description && (
+                              <p
                                 className={cn(
-                                  "flex h-10 w-10 flex-none items-center justify-center rounded-lg",
-                                  active ? "bg-gray-800 dark:bg-gray-700" : "bg-gray-500 dark:bg-gray-600",
+                                  "text-sm",
+                                  "text-gray-400 dark:text-gray-500"
                                 )}
                               >
-                                {IconComponent && <IconComponent className="h-6 w-6 text-white" aria-hidden="true" />}
-                              </div>
-                              <div className="ml-4 flex-auto">
-                                <p
-                                  className={cn(
-                                    "text-sm font-medium",
-                                    active ? "text-gray-900 dark:text-gray-100" : "text-gray-700 dark:text-gray-400",
-                                  )}
-                                >
-                                  {page.name}
-                                </p>
-                                {page.description && (
-                                  <p
-                                    className={cn(
-                                      "text-sm",
-                                      active ? "text-gray-500 dark:text-gray-400" : "text-gray-400 dark:text-gray-500",
-                                    )}
-                                  >
-                                    {page.description}
-                                  </p>
-                                )}
-                              </div>
-                            </>
-                          )
-                        }}
-                      </Combobox.Option>
-                    ))}
-                  </Combobox.Options>
+                                {page.description}
+                              </p>
+                            )}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
                 )}
 
                 {query !== "" && filteredPages.length === 0 && (
@@ -131,11 +134,11 @@ export default function CommandPalette({ navigation }: { navigation: any }) {
                     <p className="text-gray-500 dark:text-gray-400">No pages found.</p>
                   </div>
                 )}
-              </Combobox>
-            </Dialog.Panel>
-          </Transition>
-        </div>
-      </Dialog>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </>
   )
 }

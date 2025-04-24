@@ -1,5 +1,3 @@
-/** @jsxImportSource react */
-import React from 'react'
 import HomeLayout from '@/components/HomeLayout'
 
 export default function HomePage() {
