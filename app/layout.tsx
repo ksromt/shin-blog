@@ -7,6 +7,7 @@ import Navigation from "@/components/navigation"
 import SectionContainer from "@/components/section-container"
 import Footer from "@/components/footer"
 import siteMetadata from "@/data/siteMetadata"
+import { Providers } from './providers'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,15 +25,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-background text-foreground`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <SectionContainer>
-            <div className="flex h-screen flex-col justify-between">
-              <Navigation />
-              <main className="mb-auto">{children}</main>
-              <Footer />
-            </div>
-          </SectionContainer>
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <SectionContainer>
+              <div className="flex h-screen flex-col justify-between">
+                <Navigation />
+                <main className="mb-auto">{children}</main>
+                <Footer />
+              </div>
+            </SectionContainer>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )

@@ -1,5 +1,24 @@
 // Mock data for guestbook entries
-const entries = [
+interface GuestbookEntry {
+  id: string;
+  name: string;
+  date: string;
+  message: string;
+}
+
+const entries: GuestbookEntry[] = [
+  {
+    id: "1",
+    name: "张三",
+    date: "2024-03-20",
+    message: "这是一个测试留言"
+  },
+  {
+    id: "2",
+    name: "李四",
+    date: "2024-03-21",
+    message: "这是另一个测试留言"
+  }
 ]
 
 export default function GuestbookEntries() {
