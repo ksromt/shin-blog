@@ -16,6 +16,7 @@ console.log('GITHUB_ID exists:', !!process.env.GITHUB_ID);
 console.log('GITHUB_SECRET exists:', !!process.env.GITHUB_SECRET);
 console.log('GOOGLE_CLIENT_ID exists:', !!process.env.GOOGLE_CLIENT_ID);
 console.log('GOOGLE_CLIENT_SECRET exists:', !!process.env.GOOGLE_CLIENT_SECRET);
+console.log('NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET);
 
 // 扩展Session类型以包含用户ID
 declare module "next-auth" {
@@ -46,14 +47,56 @@ export const options: NextAuthOptions = {
     signOut: '/auth/signout',
     error: '/auth/error',
   },
-  // 强制使用数据库session策略
+  // 强制使用数据库session策略，完全禁用JWT
   session: {
     strategy: "database",
     maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
   },
-  // 完全禁用自定义cookies，使用默认配置
-  // cookies: 注释掉自定义cookies配置，让NextAuth使用默认值
+  // 明确禁用JWT
+  jwt: {
+    encode: async () => {
+      // 返回空字符串，禁用JWT编码
+      return "";
+    },
+    decode: async () => {
+      // 返回null，禁用JWT解码
+      return null;
+    },
+  },
+  // 使用默认cookie配置，但确保路径正确
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true // HTTPS环境
+      }
+    },
+    csrfToken: {
+      name: `next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    callbackUrl: {
+      name: `next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    }
+  },
   secret: process.env.NEXTAUTH_SECRET,
+  // 添加调试和错误处理
+  debug: process.env.NODE_ENV === 'development',
   // 数据库session策略的回调
   callbacks: {
     async session({ session, user }) {
@@ -61,7 +104,25 @@ export const options: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id;
       }
+      console.log('Session callback called:', { sessionExists: !!session, userExists: !!user });
       return session;
+    },
+    async signIn({ user, account, profile }) {
+      console.log('SignIn callback called:', { 
+        userEmail: user.email, 
+        provider: account?.provider,
+        accountExists: !!account 
+      });
+      return true;
+    },
+  },
+  // 事件处理器，用于调试
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
+      console.log('SignIn event:', { userEmail: user.email, provider: account?.provider, isNewUser });
+    },
+    async session({ session, token }) {
+      console.log('Session event:', { userEmail: session.user?.email });
     },
   },
 }; 
