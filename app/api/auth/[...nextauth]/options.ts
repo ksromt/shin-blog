@@ -115,14 +115,15 @@ export const options: NextAuthOptions = {
       });
       return true;
     },
-    async redirect({ url, baseUrl }) {
-      console.log('Redirect callback called:', { url, baseUrl });
-      // 确保重定向到正确的URL
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // 允许重定向到同一域名
-      if (new URL(url).origin === baseUrl) return url;
-      return baseUrl;
-    },
+    // 暂时移除redirect callback，让NextAuth使用默认重定向逻辑
+    // async redirect({ url, baseUrl }) {
+    //   console.log('Redirect callback called:', { url, baseUrl });
+    //   // 确保重定向到正确的URL
+    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
+    //   // 允许重定向到同一域名
+    //   if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
   },
   // 事件处理器，用于调试
   events: {
