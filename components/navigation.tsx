@@ -24,16 +24,18 @@ export default function Navigation() {
             {`~${pathname}`}{" "}
             <Typewriter
               options={{
-                strings: [ ],
+                strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
                 autoStart: true,
                 loop: true,
+                delay: 75,
+                deleteSpeed: 50
               }}
             />
           </div>
         </Link>
       </div>
       <div className="flex items-center text-base leading-5">
-        <div className="hidden sm:block mr-4">
+        <nav className="hidden sm:block mr-4">
           {headerNavLinks.map((link) => (
             <Link
               key={link.title}
@@ -41,11 +43,12 @@ export default function Navigation() {
               className={`rounded py-1 px-2 text-foreground hover:bg-muted sm:py-2 sm:px-3 ${
                 pathname === link.href ? "font-medium" : "text-muted-foreground hover:text-foreground"
               }`}
+              aria-current={pathname === link.href ? "page" : undefined}
             >
               {link.title}
             </Link>
           ))}
-        </div>
+        </nav>
         <div className="flex items-center space-x-2">
           <CommandPalette navigation={navigation} />
           <Button

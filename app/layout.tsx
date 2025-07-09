@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: siteMetadata.title,
   description: siteMetadata.description,
-    generator: 'v0.dev'
+    generator: 'next.js'
 }
 
 export default function RootLayout({

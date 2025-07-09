@@ -28,3 +28,9 @@ next-env.d.ts
 
 .svn/
 .cursor/
+# SpecStory explanation file
+.specstory/.what-is-this.md
+
+# Docs
+/Docs/AskLog/
+/Docs/FeatureMap.md
