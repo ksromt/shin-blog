@@ -119,30 +119,27 @@ export const options: NextAuthOptions = {
     },
     async signIn({ user, account, profile }) {
       try {
-        console.log('SignIn callback called:', { 
-          userEmail: user.email, 
+        console.log('=== DETAILED SignIn callback ===');
+        console.log('User:', { 
+          id: user.id,
+          email: user.email, 
+          name: user.name,
+          image: user.image
+        });
+        console.log('Account:', {
           provider: account?.provider,
-          accountExists: !!account,
-          userId: user.id,
-          accountId: account?.providerAccountId
+          type: account?.type,
+          providerAccountId: account?.providerAccountId
         });
-        
-        // 检查用户是否已存在
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email || '' },
-          include: { accounts: true }
+        console.log('Profile:', {
+          id: (profile as any)?.id,
+          login: (profile as any)?.login || (profile as any)?.email
         });
-        
-        console.log('Existing user check:', {
-          found: !!existingUser,
-          accountsCount: existingUser?.accounts.length || 0,
-          hasGithubAccount: existingUser?.accounts.some(acc => acc.provider === 'github') || false
-        });
+        console.log('=== END SignIn callback ===');
         
         return true;
       } catch (error) {
-        console.error('Error in signIn callback:', error);
-        // 即使有错误也返回true，让NextAuth继续处理
+        console.error('=== SignIn callback ERROR ===', error);
         return true;
       }
     },
