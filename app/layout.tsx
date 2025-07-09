@@ -1,6 +1,5 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navigation from "@/components/navigation"
@@ -8,8 +7,6 @@ import SectionContainer from "@/components/section-container"
 import Footer from "@/components/footer"
 import siteMetadata from "@/data/siteMetadata"
 import { Providers } from './providers'
-
-const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: siteMetadata.title,
@@ -24,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background text-foreground`}>
+      <body className="min-h-screen bg-background text-foreground font-sans">
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <SectionContainer>

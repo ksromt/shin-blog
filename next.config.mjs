@@ -9,6 +9,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Skip telemetry during build
+  env: {
+    NEXT_TELEMETRY_DISABLED: '1',
+  },
+  // Output configuration for better compatibility
+  output: 'standalone',
 }
 
 export default nextConfig

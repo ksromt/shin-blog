@@ -2,8 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
@@ -48,5 +49,19 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto flex flex-col items-center justify-center min-h-[70vh]">
+        <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md text-center">
+          <h1 className="text-3xl font-bold text-red-600">加载中...</h1>
+        </div>
+      </div>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   );
 } 
