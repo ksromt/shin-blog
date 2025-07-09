@@ -50,6 +50,23 @@ export const options: NextAuthOptions = {
       return baseUrl;
     },
   },
+  // 生产环境安全配置
+  cookies: {
+    pkceCodeVerifier: {
+      name: "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
+  // Session 配置
+  session: {
+    strategy: "database",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   // 添加调试模式以便于排查问题
   debug: process.env.NODE_ENV === 'development',
 }; 
