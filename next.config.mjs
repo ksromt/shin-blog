@@ -13,7 +13,7 @@ const nextConfig = {
     NEXT_TELEMETRY_DISABLED: '1',
   },
   // Output configuration for better compatibility
-  output: 'standalone',
+  // output: 'standalone', // 注释掉这行以使用标准部署
 }
 
 export default nextConfig
