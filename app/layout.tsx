@@ -8,7 +8,6 @@ import Footer from "@/components/footer"
 import siteMetadata from "@/data/siteMetadata"
 import { Providers } from './providers'
 
-
 export const metadata: Metadata = {
   title: siteMetadata.title,
   description: siteMetadata.description,
@@ -22,8 +21,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-       <body className="min-h-screen bg-background text-foreground font-sans">
-	 <Providers>
+      <body className="min-h-screen bg-background text-foreground font-sans">
+        <Providers>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <SectionContainer>
               <div className="flex h-screen flex-col justify-between">

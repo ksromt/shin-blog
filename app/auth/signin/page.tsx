@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function SignInPage() {
+function SignInContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/guestbook';
@@ -84,5 +84,22 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto flex items-center justify-center min-h-[70vh]">
+        <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold">加载中...</h1>
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mt-4"></div>
+          </div>
+        </div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 } 

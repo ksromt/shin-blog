@@ -50,9 +50,7 @@ function AuthErrorContent() {
       </div>
     </div>
   );
-} 
-
-
+}
 export default function AuthErrorPage() {
   return (
     <Suspense fallback={
@@ -65,4 +63,4 @@ export default function AuthErrorPage() {
       <AuthErrorContent />
     </Suspense>
   );
-} 
+}
