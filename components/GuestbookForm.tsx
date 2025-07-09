@@ -30,11 +30,13 @@ export default function GuestbookForm() {
         throw new Error('Failed to submit message');
       }
 
-      // 成功提交
+      // 成功提交后清空表单并刷新页面
       setMessage('');
-      // 可以加入刷新留言列表的逻辑
+      // 刷新页面以显示新留言
+      window.location.reload();
     } catch (error) {
       console.error('Error submitting message:', error);
+      alert('留言提交失败，请重试');
     } finally {
       setIsSubmitting(false);
     }

@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma/prisma';
 import GuestbookForm from "@/components/GuestbookForm"
 import { formatDistanceToNow } from 'date-fns';
 
+// 添加重新验证设置，每60秒重新生成一次页面
+export const revalidate = 60;
+
 interface GuestbookEntry {
   id: string;
   message: string;

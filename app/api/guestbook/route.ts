@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma/prisma';
 import { getServerSession } from 'next-auth';
 import { options } from '../auth/[...nextauth]/options';
+import { revalidatePath } from 'next/cache';
 
 // 获取所有留言
 export async function GET() {
@@ -80,6 +81,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // 重新验证留言板页面缓存
+    revalidatePath('/guestbook');
     return NextResponse.json({ entry }, { status: 201 });
   } catch (error) {
     console.error('Error creating guestbook entry:', error);
