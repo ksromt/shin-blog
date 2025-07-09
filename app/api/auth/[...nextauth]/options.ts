@@ -46,23 +46,13 @@ export const options: NextAuthOptions = {
     signOut: '/auth/signout',
     error: '/auth/error',
   },
-  // 使用数据库session策略（避免JWT问题）
+  // 强制使用数据库session策略
   session: {
     strategy: "database",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  // 强制清除所有现有cookies
-  cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true,
-      },
-    },
-  },
+  // 完全禁用自定义cookies，使用默认配置
+  // cookies: 注释掉自定义cookies配置，让NextAuth使用默认值
   secret: process.env.NEXTAUTH_SECRET,
   // 数据库session策略的回调
   callbacks: {
