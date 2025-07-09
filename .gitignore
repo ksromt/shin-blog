@@ -29,7 +29,7 @@ next-env.d.ts
 .svn/
 .cursor/
 # SpecStory explanation file
-.specstory
+.specstory/
 .specstory/.what-is-this.md
 
 # Docs
