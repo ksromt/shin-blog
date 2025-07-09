@@ -87,7 +87,7 @@ export const options: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: true, // 生产环境强制使用 HTTPS
+        secure: true,
       },
     },
     callbackUrl: {
@@ -105,6 +105,26 @@ export const options: NextAuthOptions = {
         sameSite: 'lax',
         path: '/',
         secure: true,
+      },
+    },
+    pkceCodeVerifier: {
+      name: `next-auth.pkce.code_verifier`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+        maxAge: 60 * 15, // 15 minutes
+      },
+    },
+    state: {
+      name: `next-auth.state`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+        maxAge: 60 * 15, // 15 minutes
       },
     },
   },
