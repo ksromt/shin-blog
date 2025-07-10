@@ -11,7 +11,12 @@ import { Providers } from './providers'
 export const metadata: Metadata = {
   title: siteMetadata.title,
   description: siteMetadata.description,
-    generator: 'next.js'
+  generator: 'next.js',
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
 }
 
 export default function RootLayout({
