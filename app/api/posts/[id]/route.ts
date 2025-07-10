@@ -1,6 +1,9 @@
 import { prisma } from '@/lib/prisma/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { getPostById } from '@/src/backend/api/posts';
+import { getServerSession } from 'next-auth/next';
+import { options } from '../../auth/[...nextauth]/options';
+import { isAdmin } from '@/lib/auth-config';
 
 interface Params {
   params: {
@@ -29,6 +32,16 @@ export async function GET(request: NextRequest, { params }: Params) {
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
+    // Check authentication and authorization
+    const session = await getServerSession(options);
+    
+    if (!session || !session.user || !isAdmin(session.user.email)) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Only admin can update posts' },
+        { status: 403 }
+      );
+    }
+
     const { id } = params;
     const body = await request.json();
     const { title, content, published, tags } = body;
@@ -85,6 +98,16 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
+    // Check authentication and authorization
+    const session = await getServerSession(options);
+    
+    if (!session || !session.user || !isAdmin(session.user.email)) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Only admin can delete posts' },
+        { status: 403 }
+      );
+    }
+
     const { id } = params;
 
     // Check if post exists

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllPosts, createPost } from '@/src/backend/api/posts';
+import { getServerSession } from 'next-auth/next';
+import { options } from '../auth/[...nextauth]/options';
+import { isAdmin } from '@/lib/auth-config';
 
 export async function GET() {
   const { posts, error } = await getAllPosts();
@@ -13,6 +16,16 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication and authorization
+    const session = await getServerSession(options);
+    
+    if (!session || !session.user || !isAdmin(session.user.email)) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Only admin can create posts' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { title, content, authorId, tags } = body;
 
