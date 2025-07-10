@@ -22,15 +22,17 @@ export default function Navigation() {
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between text-xl font-semibold">
             {`~${pathname}`}{" "}
-            <Typewriter
-              options={{
-                strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
-                autoStart: true,
-                loop: true,
-                delay: 75,
-                deleteSpeed: 50
-              }}
-            />
+            {pathname === "/" && (
+              <Typewriter
+                options={{
+                  strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
+                  autoStart: true,
+                  loop: true,
+                  delay: 75,
+                  deleteSpeed: 50
+                }}
+              />
+            )}
           </div>
         </Link>
       </div>
