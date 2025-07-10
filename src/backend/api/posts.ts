@@ -72,9 +72,10 @@ export async function createPost(data: {
   content: string;
   authorId: string;
   tags?: string[];
+  published?: boolean;
 }) {
   try {
-    const { title, content, authorId, tags } = data;
+    const { title, content, authorId, tags, published = false } = data;
 
     if (!title || !content || !authorId) {
       return { post: null, error: 'Missing required fields' };
@@ -84,6 +85,7 @@ export async function createPost(data: {
       data: {
         title,
         content,
+        published,
         author: {
           connect: { id: authorId },
         },

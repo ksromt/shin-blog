@@ -27,9 +27,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { title, content, authorId, tags } = body;
+    const { title, content, authorId, tags, published } = body;
 
-    const { post, error } = await createPost({ title, content, authorId, tags });
+    const { post, error } = await createPost({ title, content, authorId, tags, published });
     
     if (error) {
       return NextResponse.json({ error }, { status: error === 'Missing required fields' ? 400 : 500 });
