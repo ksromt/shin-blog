@@ -2,12 +2,35 @@ import { SearchIcon } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { prisma } from '@/lib/prisma/prisma'
+import { formatDistanceToNow } from 'date-fns'
 
-// Mock data for blog posts
-const posts = [
-]
+async function getPosts() {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+        tags: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return posts;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+}
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getPosts();
   return (
     <div>
       <h1 className="text-4xl font-bold mb-6">All Posts</h1>
@@ -20,29 +43,49 @@ export default function BlogPage() {
       <div className="border-t border-border" />
 
       <div className="space-y-12 mt-8">
-        {posts.map((post) => (
-          <article key={post.id} className="space-y-2">
-            <div className="flex items-center text-sm text-muted-foreground">
-              <span>{post.date}</span>
-              <span className="mx-2">•</span>
-              <span>{post.views} views</span>
-            </div>
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <article key={post.id} className="space-y-2">
+              <div className="flex items-center text-sm text-muted-foreground">
+                <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
+                <span className="mx-2">•</span>
+                <span>by {post.author.name}</span>
+              </div>
 
-            <Link href={`/blog/${post.slug}`} className="block">
-              <h2 className="text-2xl font-semibold hover:underline">{post.title}</h2>
+              <Link href={`/blog/${post.id}`} className="block">
+                <h2 className="text-2xl font-semibold hover:underline">{post.title}</h2>
+              </Link>
+
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <Badge key={tag.id} variant="outline" className="rounded-full bg-background hover:bg-muted">
+                    {tag.name}
+                  </Badge>
+                ))}
+              </div>
+
+              <p className="text-muted-foreground">
+                {post.content.length > 200 
+                  ? `${post.content.substring(0, 200)}...` 
+                  : post.content
+                }
+              </p>
+            </article>
+          ))
+        ) : (
+          <div className="text-center py-12">
+            <h3 className="text-xl font-semibold mb-4">尚未发布文章</h3>
+            <p className="text-muted-foreground mb-4">
+              博客文章将在发布后显示在这里。
+            </p>
+            <Link 
+              href="/arcadiaedenAdmin" 
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              创建第一篇文章
             </Link>
-
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className="rounded-full bg-background hover:bg-muted">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-
-            <p className="text-muted-foreground">{post.excerpt}</p>
-          </article>
-        ))}
+          </div>
+        )}
       </div>
     </div>
   )

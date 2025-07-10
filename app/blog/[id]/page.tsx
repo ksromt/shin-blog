@@ -3,9 +3,33 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft } from "lucide-react"
 import { notFound } from "next/navigation"
+import { prisma } from '@/lib/prisma/prisma'
+import { formatDistanceToNow } from 'date-fns'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
-// Mock data for blog posts
-const posts = [
+async function getPost(id: string) {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+        tags: true,
+      },
+    });
+    return post;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+}
+
+// Keep mock data for fallback demo content
+const mockPosts = [
   {
     id: "1",
     title: "How to get the Spotify Refresh Token",
@@ -106,8 +130,11 @@ const posts = [
   },
 ]
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = posts.find((post) => post.slug === params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  // Try to get real post first, then fallback to mock
+  const { id } = await params;
+  const realPost = await getPost(id);
+  const post = realPost || mockPosts.find((post: any) => post.id === id);
 
   if (!post) {
     return {
@@ -117,12 +144,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: `${post.title} | ~/blog`,
-    description: post.content.substring(0, 160).replace(/<[^>]*>/g, ""),
+    description: (post.content || '').substring(0, 160).replace(/<[^>]*>/g, ""),
   }
 }
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const post = posts.find((post) => post.slug === params.slug)
+export default async function BlogPost({ params }: { params: Promise<{ id: string }> }) {
+  // Try to get real post first, then fallback to mock
+  const { id } = await params;
+  const realPost = await getPost(id);
+  const post = realPost || mockPosts.find((post: any) => post.id === id);
 
   if (!post) {
     notFound()
@@ -139,24 +169,39 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <h1 className="text-3xl font-bold">{post.title}</h1>
 
         <div className="flex items-center text-sm text-muted-foreground">
-          <span>{post.date}</span>
+          <span>
+            {realPost 
+              ? formatDistanceToNow(new Date(realPost.createdAt), { addSuffix: true })
+              : (post as any).date
+            }
+          </span>
           <span className="mx-2">•</span>
-          <span>{post.views} views</span>
+          <span>
+            {realPost 
+              ? `by ${realPost.author.name}` 
+              : `${(post as any).views} views`
+            }
+          </span>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {post.tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="rounded-full bg-background hover:bg-muted">
-              {tag}
+          {(realPost ? realPost.tags : (post as any).tags).map((tag: any) => (
+            <Badge key={realPost ? tag.id : tag} variant="outline" className="rounded-full bg-background hover:bg-muted">
+              {realPost ? tag.name : tag}
             </Badge>
           ))}
         </div>
       </div>
 
-      <div
-        className="prose prose-neutral dark:prose-invert max-w-none"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="prose prose-neutral dark:prose-invert max-w-none">
+        {realPost ? (
+          // Use MarkdownRenderer for database posts
+          <MarkdownRenderer content={realPost.content} />
+        ) : (
+          // Use dangerouslySetInnerHTML for mock posts (HTML content)
+          <div dangerouslySetInnerHTML={{ __html: (post as any).content }} />
+        )}
+      </div>
     </article>
   )
-}
+} 
