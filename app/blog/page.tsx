@@ -2,35 +2,12 @@ import { SearchIcon } from "lucide-react"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { prisma } from '@/lib/prisma/prisma'
+import { postRepository } from '@/lib/repositories'
 import { formatDistanceToNow } from 'date-fns'
 
-async function getPosts() {
-  try {
-    const posts = await prisma.post.findMany({
-      where: { published: true },
-      include: {
-        author: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-        tags: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-    return posts;
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return [];
-  }
-}
-
 export default async function BlogPage() {
-  const posts = await getPosts();
+  const posts = await postRepository.findPublished();
+
   return (
     <div>
       <h1 className="text-4xl font-bold mb-6">All Posts</h1>
@@ -65,8 +42,8 @@ export default async function BlogPage() {
               </div>
 
               <p className="text-muted-foreground">
-                {post.content.length > 200 
-                  ? `${post.content.substring(0, 200)}...` 
+                {post.content.length > 200
+                  ? `${post.content.substring(0, 200)}...`
                   : post.content
                 }
               </p>
@@ -78,8 +55,8 @@ export default async function BlogPage() {
             <p className="text-muted-foreground mb-4">
               博客文章将在发布后显示在这里。
             </p>
-            <Link 
-              href="/arcadiaedenAdmin" 
+            <Link
+              href="/arcadiaedenAdmin"
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               创建第一篇文章

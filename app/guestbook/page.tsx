@@ -1,70 +1,37 @@
 import type { Metadata } from "next"
-import { prisma } from '@/lib/prisma/prisma';
+import { guestbookRepository } from '@/lib/repositories';
 import GuestbookForm from "@/components/GuestbookForm"
 import { formatDistanceToNow } from 'date-fns';
 
 // 添加重新验证设置，每60秒重新生成一次页面
 export const revalidate = 60;
 
-interface GuestbookEntry {
-  id: string;
-  message: string;
-  createdAt: Date;
-  author: {
-    name: string | null;
-    image: string | null;
-  };
-}
-
 export const metadata: Metadata = {
   title: "Guestbook | ~/blog",
   description: "Sign my guestbook and leave a message",
 }
 
-async function getGuestbookEntries(): Promise<GuestbookEntry[]> {
-  try {
-    const entries = await prisma.guestbook.findMany({
-      include: {
-        author: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-    
-    return entries as GuestbookEntry[];
-  } catch (error) {
-    console.error('Error fetching guestbook entries:', error);
-    return [];
-  }
-}
-
 export default async function GuestbookPage() {
-  const entries = await getGuestbookEntries();
-  
+  const entries = await guestbookRepository.findAll();
+
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8 text-center">留言簿</h1>
-      
+
       <GuestbookForm />
-      
+
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-6">最近的留言</h2>
-        
+
         {entries.length > 0 ? (
           <div className="space-y-6">
-            {entries.map((entry: GuestbookEntry) => (
+            {entries.map((entry) => (
               <div key={entry.id} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex gap-2 items-center mb-2">
                   {entry.author.image ? (
-                    <img 
-                      src={entry.author.image} 
-                      alt={entry.author.name || '用户头像'} 
+                    <img
+                      src={entry.author.image}
+                      alt={entry.author.name || '用户头像'}
                       className="w-6 h-6 rounded-full"
                     />
                   ) : (
@@ -77,7 +44,7 @@ export default async function GuestbookPage() {
                     {formatDistanceToNow(new Date(entry.createdAt), { addSuffix: true })}
                   </span>
                 </div>
-                
+
                 <p className="text-gray-700">{entry.message}</p>
               </div>
             ))}
