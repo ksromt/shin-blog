@@ -1,14 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma/prisma';
+import { NextResponse } from 'next/server';
+import { postRepository } from '@/lib/repositories';
 import { getServerSession } from 'next-auth';
 import { options as authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { isAdmin } from '@/lib/auth-config';
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH() {
   try {
-    // Get session
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.email || !isAdmin(session.user.email)) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -16,21 +15,12 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    // Update all unpublished posts to published
-    const result = await prisma.post.updateMany({
-      where: {
-        published: false
-      },
-      data: {
-        published: true
-      }
-    });
+    const count = await postRepository.publishAll();
 
     return NextResponse.json({
       message: 'Successfully published all posts',
-      updatedCount: result.count
+      updatedCount: count
     });
-
   } catch (error) {
     console.error('Error publishing all posts:', error);
     return NextResponse.json(
@@ -38,4 +28,4 @@ export async function PATCH(req: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}

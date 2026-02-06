@@ -1,6 +1,5 @@
-import { prisma } from '@/lib/prisma/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { getPostById } from '@/src/backend/api/posts';
+import { postRepository } from '@/lib/repositories';
 import { getServerSession } from 'next-auth/next';
 import { options } from '../../auth/[...nextauth]/options';
 import { isAdmin } from '@/lib/auth-config';
@@ -11,30 +10,26 @@ interface Params {
   };
 }
 
-interface TagType {
-  id: string;
-  name: string;
-}
-
 export async function GET(request: NextRequest, { params }: Params) {
-  const { id } = params;
-  const { post, error } = await getPostById(id);
-  
-  if (error) {
-    return NextResponse.json(
-      { error },
-      { status: error === 'Post not found' ? 404 : 500 }
-    );
+  try {
+    const { id } = params;
+    const post = await postRepository.findById(id);
+
+    if (!post) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ post }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
   }
-  
-  return NextResponse.json({ post }, { status: 200 });
 }
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
-    // Check authentication and authorization
     const session = await getServerSession(options);
-    
+
     if (!session || !session.user || !isAdmin(session.user.email)) {
       return NextResponse.json(
         { error: 'Unauthorized: Only admin can update posts' },
@@ -46,61 +41,23 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const body = await request.json();
     const { title, content, published, tags } = body;
 
-    // Check if post exists
-    const existingPost = await prisma.post.findUnique({
-      where: { id },
-      include: { tags: true },
-    });
-
+    const existingPost = await postRepository.findWithTags(id);
     if (!existingPost) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    // Update post
-    const updatedPost = await prisma.post.update({
-      where: { id },
-      data: {
-        ...(title && { title }),
-        ...(content && { content }),
-        ...(published !== undefined && { published }),
-        ...(tags && {
-          tags: {
-            disconnect: existingPost.tags.map((tag: TagType) => ({ id: tag.id })),
-            connectOrCreate: tags.map((tagName: string) => ({
-              where: { name: tagName },
-              create: { name: tagName },
-            })),
-          },
-        }),
-      },
-      include: {
-        author: {
-          select: {
-            name: true,
-          },
-        },
-        tags: true,
-      },
-    });
-
+    const updatedPost = await postRepository.update(id, { title, content, published, tags }, existingPost.tags);
     return NextResponse.json({ post: updatedPost }, { status: 200 });
   } catch (error) {
     console.error('Error updating post:', error);
-    return NextResponse.json(
-      { error: 'Failed to update post' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
   }
 }
 
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
-    // Check authentication and authorization
     const session = await getServerSession(options);
-    
+
     if (!session || !session.user || !isAdmin(session.user.email)) {
       return NextResponse.json(
         { error: 'Unauthorized: Only admin can delete posts' },
@@ -110,32 +67,15 @@ export async function DELETE(request: NextRequest, { params }: Params) {
 
     const { id } = params;
 
-    // Check if post exists
-    const existingPost = await prisma.post.findUnique({
-      where: { id },
-    });
-
-    if (!existingPost) {
-      return NextResponse.json(
-        { error: 'Post not found' },
-        { status: 404 }
-      );
+    const exists = await postRepository.exists(id);
+    if (!exists) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    // Delete post (comments will be cascaded due to prisma schema)
-    await prisma.post.delete({
-      where: { id },
-    });
-
-    return NextResponse.json(
-      { message: 'Post deleted successfully' },
-      { status: 200 }
-    );
+    await postRepository.delete(id);
+    return NextResponse.json({ message: 'Post deleted successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error deleting post:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete post' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
   }
-} 
+}

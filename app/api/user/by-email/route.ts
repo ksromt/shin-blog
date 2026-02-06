@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma/prisma';
+import { userRepository } from '@/lib/repositories';
 
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json();
-    
+
     if (!email) {
       return NextResponse.json(
         { error: 'Email is required' },
@@ -12,15 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        image: true,
-      },
-    });
+    const user = await userRepository.findByEmail(email);
 
     if (!user) {
       return NextResponse.json(
@@ -37,4 +29,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}
