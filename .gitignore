@@ -36,6 +36,13 @@ next-env.d.ts
 # Docs (internal development notes, not published)
 /Docs/
 
+# Blog content (markdown source files — seeded into DB, not deployed directly)
+/content/
+
+# Blog seed & RAG export scripts (contain full post content)
+/scripts/seed-blog-posts.js
+/scripts/export-rag-content.js
+
 # Test screenshots
 /screenshots/
 

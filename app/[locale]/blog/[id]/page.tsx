@@ -14,16 +14,29 @@ import BlogPostClient from './BlogPostClient'
 import { estimateReadingTime } from '@/lib/utils/reading-time'
 import { extractHeadings } from '@/lib/utils/headings'
 
+/**
+ * Resolve a post by slug+locale first, then fall back to CUID lookup.
+ * This enables human-readable URLs (/blog/hello-world) while keeping
+ * backward compatibility with old CUID-based URLs.
+ */
+async function resolvePost(idOrSlug: string, locale: string) {
+  // Try slug+locale first (new format)
+  const bySlug = await postRepository.findBySlugAndLocale(idOrSlug, locale);
+  if (bySlug) return bySlug;
+  // Fall back to CUID (backward compat)
+  return postRepository.findById(idOrSlug);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; id: string }> }): Promise<Metadata> {
-  const { id } = await params;
-  const post = await postRepository.findById(id);
+  const { locale, id } = await params;
+  const post = await resolvePost(id, locale);
 
   if (!post) {
     return { title: "Post Not Found" }
   }
 
   const description = post.content.substring(0, 160).replace(/<[^>]*>/g, "").replace(/[#*`]/g, "")
-  const url = `${siteMetadata.siteUrl}/blog/${post.id}`
+  const url = `${siteMetadata.siteUrl}/${locale}/blog/${post.slug || post.id}`
 
   return {
     title: post.title,
@@ -49,7 +62,7 @@ export default async function BlogPost({ params }: { params: Promise<{ locale: s
   const { locale, id } = await params;
   setRequestLocale(locale)
   const t = await getTranslations('Blog')
-  const post = await postRepository.findById(id);
+  const post = await resolvePost(id, locale);
 
   if (!post) {
     notFound()
@@ -57,10 +70,10 @@ export default async function BlogPost({ params }: { params: Promise<{ locale: s
 
   const readingTime = estimateReadingTime(post.content)
   const headings = extractHeadings(post.content)
-  const postUrl = `${siteMetadata.siteUrl}/blog/${post.id}`
+  const postUrl = `${siteMetadata.siteUrl}/blog/${post.slug || post.id}`
 
-  // Find related posts by shared tags
-  const allPosts = await postRepository.findPublished()
+  // Find related posts by shared tags (same locale)
+  const allPosts = await postRepository.findPublished(undefined, locale)
   const postTagNames = new Set(post.tags.map((t) => t.name))
   const relatedPosts = allPosts
     .filter((p) => p.id !== post.id && p.tags.some((t) => postTagNames.has(t.name)))

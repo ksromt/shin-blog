@@ -94,8 +94,6 @@
     "catLlmRagDesc": "检索增强生成、向量数据库、基于事实的AI系统",
     "catFineTuning": "模型微调",
     "catFineTuningDesc": "参数高效训练、LoRA、数据集准备",
-    "catHumanities": "人文与社会",
-    "catHumanitiesDesc": "关于技术、文化与人类处境的思考",
     "catLlmSkills": "实用LLM技巧",
     "catLlmSkillsDesc": "提示工程、工具调用、Agent模式",
     "catDevNotes": "开发笔记",
@@ -110,10 +108,6 @@
     "loraQloraDesc": "基于Low-Rank Adaptation的参数高效微调。QLoRA通过4位量子化提升内存效率。",
     "trainingDataPrepTitle": "训练数据准备",
     "trainingDataPrepDesc": "数据清洗、指令格式（Alpaca、ShareGPT）及质量过滤技术。",
-    "techSocietyTitle": "技术与社会",
-    "techSocietyDesc": "关于AI和技术如何重塑社会结构、劳动和人际关系的思考。",
-    "crossCulturalTitle": "跨文化视角",
-    "crossCulturalDesc": "在中国和日本生活中的观察 — 语言、文化与身份认同。",
     "promptEngineeringTitle": "提示工程模式",
     "promptEngineeringDesc": "思维链、少样本、系统提示词和结构化输出技术。",
     "functionCallingTitle": "Function Calling 与工具调用",
@@ -123,7 +117,7 @@
     "rustOwnershipTitle": "Rust 所有权与生命周期",
     "rustOwnershipDesc": "所有权、借用、生命周期的心智模型和常见模式。"
   },
-  "RustDocs": {
+  "Kokoron": {
     "title": "问Kokoron",
     "subtitle": "与我的AI助手Kokoron聊聊博客文章和项目吧。基于RAG技术。",
     "emptyTitle": "问Kokoron",

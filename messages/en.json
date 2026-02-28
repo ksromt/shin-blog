@@ -94,8 +94,6 @@
     "catLlmRagDesc": "Retrieval-Augmented Generation, vector databases, and grounded AI systems",
     "catFineTuning": "Model Fine-Tuning",
     "catFineTuningDesc": "Parameter-efficient training, LoRA, dataset preparation",
-    "catHumanities": "Humanities & Society",
-    "catHumanitiesDesc": "Reflections on technology, culture, and the human condition",
     "catLlmSkills": "Practical LLM Skills",
     "catLlmSkillsDesc": "Prompt engineering, tool use, and agent patterns",
     "catDevNotes": "Dev Notes",
@@ -110,10 +108,6 @@
     "loraQloraDesc": "Parameter-efficient fine-tuning with Low-Rank Adaptation. QLoRA adds 4-bit quantization for memory efficiency.",
     "trainingDataPrepTitle": "Training Data Preparation",
     "trainingDataPrepDesc": "Data cleaning, instruction formatting (Alpaca, ShareGPT), and quality filtering techniques.",
-    "techSocietyTitle": "Technology & Society",
-    "techSocietyDesc": "Reflections on how AI and technology reshape social structures, labor, and human relationships.",
-    "crossCulturalTitle": "Cross-Cultural Perspectives",
-    "crossCulturalDesc": "Observations from living across China and Japan — language, culture, and identity.",
     "promptEngineeringTitle": "Prompt Engineering Patterns",
     "promptEngineeringDesc": "Chain-of-thought, few-shot, system prompts, and structured output techniques.",
     "functionCallingTitle": "Function Calling & Tool Use",
@@ -123,7 +117,7 @@
     "rustOwnershipTitle": "Rust Ownership & Lifetimes",
     "rustOwnershipDesc": "Mental model for ownership, borrowing, lifetimes, and common patterns."
   },
-  "RustDocs": {
+  "Kokoron": {
     "title": "Ask Kokoron",
     "subtitle": "Chat with Kokoron, my AI assistant, about blog posts and projects. Powered by RAG.",
     "emptyTitle": "Ask Kokoron",

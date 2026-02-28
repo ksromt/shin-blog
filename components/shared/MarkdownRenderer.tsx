@@ -4,10 +4,37 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
+import { Children, isValidElement } from 'react';
 
 interface MarkdownRendererProps {
   content: string;
   className?: string;
+}
+
+/**
+ * Extract plain text from React children to generate heading IDs.
+ * Uses the same slug algorithm as extractHeadings() in lib/utils/headings.ts.
+ */
+function getHeadingId(children: React.ReactNode): string {
+  const text = extractText(children);
+  const id = text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  return id || 'heading';
+}
+
+function extractText(node: React.ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (typeof node === 'number') return String(node);
+  if (!isValidElement(node)) {
+    if (Array.isArray(node)) return node.map(extractText).join('');
+    return '';
+  }
+  const props = node.props as { children?: React.ReactNode };
+  return Children.toArray(props.children).map(extractText).join('');
 }
 
 export default function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
@@ -19,17 +46,17 @@ export default function MarkdownRenderer({ content, className = '' }: MarkdownRe
         components={{
           // Custom component overrides for better styling
           h1: ({ children }) => (
-            <h1 className="text-3xl font-bold mb-6 mt-8 first:mt-0 border-b border-border pb-2">
+            <h1 id={getHeadingId(children)} className="text-3xl font-bold mb-6 mt-8 first:mt-0 border-b border-border pb-2">
               {children}
             </h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-2xl font-semibold mb-4 mt-8 first:mt-0 border-b border-border pb-1">
+            <h2 id={getHeadingId(children)} className="text-2xl font-semibold mb-4 mt-8 first:mt-0 border-b border-border pb-1">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-xl font-semibold mb-3 mt-6 first:mt-0">
+            <h3 id={getHeadingId(children)} className="text-xl font-semibold mb-3 mt-6 first:mt-0">
               {children}
             </h3>
           ),

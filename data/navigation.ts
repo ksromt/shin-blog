@@ -28,6 +28,6 @@ export const navigation: NavItem[] = [
   { href: '/blog', titleKey: 'blog', label: 'Blog', icon: FileText },
   { href: '/snippets', titleKey: 'knowledge', label: 'Knowledge', icon: Library },
   { href: '/projects', titleKey: 'projects', label: 'Projects', icon: Briefcase },
-  { href: '/rust-docs', titleKey: 'askAI', label: 'Ask Kokoron', icon: Bot, descriptionKey: 'askAIDesc' },
+  { href: '/ask', titleKey: 'askAI', label: 'Ask Kokoron', icon: Bot, descriptionKey: 'askAIDesc' },
   { href: '/about', titleKey: 'about', label: 'About', icon: User },
 ];

@@ -6,7 +6,7 @@ export async function GET() {
   const posts = await postRepository.findPublished()
 
   const items = posts.map((post) => {
-    const url = `${siteMetadata.siteUrl}/en/blog/${post.id}`
+    const url = `${siteMetadata.siteUrl}/en/blog/${post.slug || post.id}`
     const description = post.content.substring(0, 300).replace(/[#*`]/g, '')
     return `    <item>
       <title>${escapeXml(post.title)}</title>

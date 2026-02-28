@@ -13,18 +13,36 @@ import siteMetadata from "@/data/siteMetadata"
 import { useTranslations } from 'next-intl'
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher"
 
+/**
+ * Clean up the pathname for display in the header.
+ * Strips the locale prefix and truncates deep paths (e.g. blog post CUIDs).
+ */
+function getDisplayPath(pathname: string): string {
+  // Strip locale prefix (/en, /ja, /zh)
+  const withoutLocale = pathname.replace(/^\/(en|ja|zh)/, '') || '/'
+  // For deep paths like /blog/[cuid], show only the section
+  const segments = withoutLocale.split('/').filter(Boolean)
+  if (segments.length > 1) {
+    return `/${segments[0]}`
+  }
+  return withoutLocale
+}
+
 export default function Navigation() {
   const pathname = usePathname()
   const { setTheme, theme } = useTheme()
   const t = useTranslations('Navigation')
+
+  const displayPath = getDisplayPath(pathname)
+  const isHome = displayPath === '/'
 
   return (
     <header className="flex items-center justify-between py-10">
       <div>
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex items-center justify-between text-xl font-semibold">
-            {`~${pathname}`}{" "}
-            {pathname === "/" && (
+            {`~${displayPath}`}{" "}
+            {isHome && (
               <Typewriter
                 options={{
                   strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
@@ -45,9 +63,10 @@ export default function Navigation() {
               key={item.href}
               href={item.href}
               className={`rounded py-1 px-2 text-foreground hover:bg-muted sm:py-2 sm:px-3 ${
-                pathname === item.href ? "font-medium" : "text-muted-foreground hover:text-foreground"
+                displayPath === item.href || (item.href !== '/' && displayPath.startsWith(item.href))
+                  ? "font-medium" : "text-muted-foreground hover:text-foreground"
               }`}
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={displayPath === item.href ? "page" : undefined}
             >
               {t(item.titleKey)}
             </Link>

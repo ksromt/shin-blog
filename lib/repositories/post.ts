@@ -13,11 +13,14 @@ const baseInclude = {
 
 export const postRepository = {
   /**
-   * Find all published posts, optionally limited
+   * Find all published posts, optionally filtered by locale and limited
    */
-  async findPublished(limit?: number): Promise<Post[]> {
+  async findPublished(limit?: number, locale?: string): Promise<Post[]> {
     const posts = await prisma.post.findMany({
-      where: { published: true },
+      where: {
+        published: true,
+        ...(locale && { locale }),
+      },
       include: baseInclude,
       orderBy: { createdAt: 'desc' },
       ...(limit && { take: limit }),
@@ -56,6 +59,26 @@ export const postRepository = {
   },
 
   /**
+   * Find a single post by slug + locale with comments.
+   * Used for locale-aware blog post URLs (e.g. /en/blog/hello-world).
+   */
+  async findBySlugAndLocale(slug: string, locale: string): Promise<PostWithComments | null> {
+    const post = await prisma.post.findUnique({
+      where: { slug_locale: { slug, locale } },
+      include: {
+        ...baseInclude,
+        comments: {
+          include: {
+            author: { select: authorSelect },
+          },
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+    return post;
+  },
+
+  /**
    * Check if a post exists
    */
   async exists(id: string): Promise<boolean> {
@@ -70,13 +93,15 @@ export const postRepository = {
    * Create a new post
    */
   async create(data: CreatePostInput): Promise<Post> {
-    const { title, content, authorId, tags, published = false } = data;
+    const { title, content, authorId, slug, locale, tags, published = false } = data;
 
     const post = await prisma.post.create({
       data: {
         title,
         content,
         published,
+        ...(slug && { slug }),
+        ...(locale && { locale }),
         author: { connect: { id: authorId } },
         ...(tags && {
           tags: {

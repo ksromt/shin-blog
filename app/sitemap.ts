@@ -6,11 +6,20 @@ export default async function sitemap() {
   const posts = await postRepository.findPublished()
   const locales = routing.locales
 
-  // Generate locale-aware blog post routes
-  const blogRoutes = posts.flatMap((post) =>
+  // Generate blog post routes using slugs (deduplicated across locales)
+  const slugsSeen = new Set<string>()
+  const uniqueSlugs: { slug: string; updatedAt: Date | null; createdAt: Date }[] = []
+  for (const post of posts) {
+    if (post.slug && !slugsSeen.has(post.slug)) {
+      slugsSeen.add(post.slug)
+      uniqueSlugs.push({ slug: post.slug, updatedAt: post.updatedAt, createdAt: post.createdAt })
+    }
+  }
+
+  const blogRoutes = uniqueSlugs.flatMap(({ slug, updatedAt, createdAt }) =>
     locales.map((locale) => ({
-      url: `${siteMetadata.siteUrl}/${locale}/blog/${post.id}`,
-      lastModified: new Date(post.updatedAt ?? post.createdAt),
+      url: `${siteMetadata.siteUrl}/${locale}/blog/${slug}`,
+      lastModified: new Date(updatedAt ?? createdAt),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
@@ -23,7 +32,7 @@ export default async function sitemap() {
     { path: '/about', changeFrequency: 'monthly' as const, priority: 0.5 },
     { path: '/projects', changeFrequency: 'monthly' as const, priority: 0.5 },
     { path: '/snippets', changeFrequency: 'weekly' as const, priority: 0.5 },
-    { path: '/rust-docs', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/ask', changeFrequency: 'monthly' as const, priority: 0.6 },
   ]
 
   const staticRoutes = staticPages.flatMap((page) =>

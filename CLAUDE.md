@@ -17,7 +17,7 @@ Koclaw AI chat widget integration interfaces are prepared for future connection.
 - **i18n**: `next-intl` with path-based routing (`/en/blog`, `/ja/blog`, `/zh/blog`)
 - **Locale Detection**: IP-based geo detection (Vercel/Cloudflare headers) + Accept-Language fallback, persisted via `NEXT_LOCALE` cookie
 - **API Middleware**: HOF pattern — `withAuth`, `withAdmin`, `withErrorHandling`, `withValidation` in `lib/api/middleware.ts`
-- **RAG Service**: FastAPI wrapper at `D:\personal_development\RAG`, proxied via `/api/rust-docs`
+- **RAG Service**: FastAPI wrapper at `D:\personal_development\RAG`, proxied via `/api/ask`
 - **Koclaw**: Chat widget placeholder at `components/koclaw/`, proxied via `/api/koclaw`
 
 ## Key Paths
@@ -37,7 +37,7 @@ Koclaw AI chat widget integration interfaces are prepared for future connection.
 | Blog post detail | `app/[locale]/blog/[id]/page.tsx`, `app/[locale]/blog/[id]/BlogPostClient.tsx` |
 | Blog sub-components | `components/blog/TableOfContents.tsx`, `components/blog/RelatedPosts.tsx` |
 | Home | `components/home/HeroSection.tsx`, `components/home/FeaturedLinks.tsx`, `components/home/ContactCard.tsx` |
-| RAG chat (Kokoron) | `app/[locale]/rust-docs/page.tsx`, `components/rust-docs/RustDocsChat.tsx`, `app/api/rust-docs/route.ts` |
+| RAG chat (Kokoron) | `app/[locale]/ask/page.tsx`, `components/ask/KokoronChat.tsx`, `app/api/ask/route.ts` |
 | Koclaw | `components/koclaw/KoclawWidget.tsx`, `app/api/koclaw/route.ts` |
 | Layout components | `components/layout/Navigation.tsx`, `components/layout/Footer.tsx`, `components/layout/MobileMenu.tsx`, `components/layout/CommandPalette.tsx`, `components/layout/LocaleSwitcher.tsx`, `components/layout/SectionContainer.tsx` |
 | Providers | `components/providers/Providers.tsx`, `components/providers/ThemeProvider.tsx` |

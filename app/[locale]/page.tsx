@@ -7,7 +7,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('Home')
-  const posts = await postRepository.findPublished(6);
+  const posts = await postRepository.findPublished(6, locale);
 
   return (
     <div className="container mx-auto px-4">

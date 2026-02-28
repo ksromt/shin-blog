@@ -23,7 +23,7 @@ export default async function HomeLayout() {
         <p className="pt-3 text-lg leading-7 text-muted-foreground">
           {t.rich('kokoronIntro', {
             kokoronLink: (chunks) => (
-              <Link href="/rust-docs" className="text-primary hover:underline font-semibold">
+              <Link href="/ask" className="text-primary hover:underline font-semibold">
                 {chunks}
               </Link>
             ),

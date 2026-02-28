@@ -11,9 +11,9 @@ interface Message {
   content: string
 }
 
-export default function RustDocsChat() {
+export default function KokoronChat() {
   const locale = useLocale()
-  const t = useTranslations('RustDocs')
+  const t = useTranslations('Kokoron')
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -41,7 +41,7 @@ export default function RustDocsChat() {
     setMessages((prev) => [...prev, assistantMessage])
 
     try {
-      const response = await fetch('/api/rust-docs', {
+      const response = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, language: locale }),

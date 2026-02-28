@@ -19,6 +19,8 @@ export interface Comment {
 
 export interface Post {
   id: string;
+  slug: string;
+  locale: string;
   title: string;
   content: string;
   published: boolean;
@@ -37,6 +39,8 @@ export interface CreatePostInput {
   title: string;
   content: string;
   authorId: string;
+  slug?: string;
+  locale?: string;
   tags?: string[];
   published?: boolean;
 }

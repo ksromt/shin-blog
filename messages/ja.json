@@ -94,8 +94,6 @@
     "catLlmRagDesc": "検索拡張生成、ベクトルDB、根拠に基づくAIシステム",
     "catFineTuning": "モデル ファインチューニング",
     "catFineTuningDesc": "パラメータ効率的な学習、LoRA、データセット準備",
-    "catHumanities": "人文学・社会",
-    "catHumanitiesDesc": "テクノロジー、文化、人間の在り方についての考察",
     "catLlmSkills": "実践 LLM スキル",
     "catLlmSkillsDesc": "プロンプトエンジニアリング、ツール活用、エージェントパターン",
     "catDevNotes": "開発ノート",
@@ -110,10 +108,6 @@
     "loraQloraDesc": "Low-Rank Adaptationによるパラメータ効率的なファインチューニング。QLoRAは4ビット量子化でメモリ効率を向上。",
     "trainingDataPrepTitle": "学習データの準備",
     "trainingDataPrepDesc": "データクリーニング、指示形式（Alpaca、ShareGPT）、品質フィルタリング技術。",
-    "techSocietyTitle": "テクノロジーと社会",
-    "techSocietyDesc": "AIとテクノロジーが社会構造、労働、人間関係をどう変えるかについての考察。",
-    "crossCulturalTitle": "異文化の視点",
-    "crossCulturalDesc": "中国と日本での生活を通じた観察 — 言語、文化、アイデンティティ。",
     "promptEngineeringTitle": "プロンプトエンジニアリング",
     "promptEngineeringDesc": "Chain-of-thought、few-shot、システムプロンプト、構造化出力のテクニック。",
     "functionCallingTitle": "Function Calling とツール活用",
@@ -123,7 +117,7 @@
     "rustOwnershipTitle": "Rust の所有権とライフタイム",
     "rustOwnershipDesc": "所有権、借用、ライフタイムのメンタルモデルと一般的なパターン。"
   },
-  "RustDocs": {
+  "Kokoron": {
     "title": "Kokoronに聞く",
     "subtitle": "ブログ記事やプロジェクトについて、AIアシスタントKokoronに質問できます。RAG搭載。",
     "emptyTitle": "Kokoronに聞く",

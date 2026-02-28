@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 
 interface RelatedPost {
   id: string
+  slug: string
   title: string
   tags: { id: string; name: string }[]
 }
@@ -24,7 +25,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
         {posts.map((post) => (
           <Link
             key={post.id}
-            href={`/blog/${post.id}`}
+            href={`/blog/${post.slug || post.id}`}
             className="block p-4 border rounded-lg hover:bg-muted/50 transition-colors"
           >
             <h3 className="font-medium mb-1 line-clamp-2">{post.title}</h3>

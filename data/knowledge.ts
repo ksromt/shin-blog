@@ -1,4 +1,4 @@
-import { Brain, Cpu, BookOpen, Wrench, Lightbulb } from 'lucide-react'
+import { Brain, Cpu, Wrench, Lightbulb } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 export interface KnowledgeEntry {
@@ -68,26 +68,6 @@ export const knowledgeCategories: KnowledgeCategory[] = [
         titleKey: 'trainingDataPrepTitle',
         descKey: 'trainingDataPrepDesc',
         tags: ['Dataset', 'Preprocessing'],
-      },
-    ],
-  },
-  {
-    id: 'humanities-thinking',
-    nameKey: 'catHumanities',
-    descKey: 'catHumanitiesDesc',
-    icon: BookOpen,
-    entries: [
-      {
-        id: 'tech-society',
-        titleKey: 'techSocietyTitle',
-        descKey: 'techSocietyDesc',
-        tags: ['Society', 'AI Ethics', 'Philosophy'],
-      },
-      {
-        id: 'cross-cultural',
-        titleKey: 'crossCulturalTitle',
-        descKey: 'crossCulturalDesc',
-        tags: ['Culture', 'Language', 'Identity'],
       },
     ],
   },

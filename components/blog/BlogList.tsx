@@ -2,14 +2,16 @@
 
 import { useState, useMemo } from 'react'
 import { SearchIcon } from "lucide-react"
-import Link from "next/link"
+import { Link } from '@/i18n/navigation'
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { formatDistanceToNow } from 'date-fns'
 import { useTranslations } from 'next-intl'
+import { stripMarkdown } from '@/lib/utils'
 
 interface BlogPost {
   id: string
+  slug: string
   title: string
   content: string
   createdAt: string | Date
@@ -57,7 +59,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
                 <span>by {post.author.name}</span>
               </div>
 
-              <Link href={`/blog/${post.id}`} className="block">
+              <Link href={`/blog/${post.slug || post.id}`} className="block">
                 <h2 className="text-2xl font-semibold hover:underline">{post.title}</h2>
               </Link>
 
@@ -70,10 +72,10 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
               </div>
 
               <p className="text-muted-foreground">
-                {post.content.length > 200
-                  ? `${post.content.substring(0, 200)}...`
-                  : post.content
-                }
+                {(() => {
+                  const plain = stripMarkdown(post.content);
+                  return plain.length > 200 ? `${plain.substring(0, 200)}...` : plain;
+                })()}
               </p>
             </article>
           ))
