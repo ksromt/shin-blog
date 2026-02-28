@@ -20,7 +20,7 @@ yarn-error.log*
 .env*
 !.env.example
 !.env.production.example
-
+.env.production
 # vercel
 .vercel
 
@@ -53,6 +53,7 @@ lib/generated/
 # Claude Code internal data
 .claude/
 
-
+# Project-specific instruction files (contain local paths, not for public repo)
+CLAUDE.md
 personal.md
 
