@@ -2,6 +2,8 @@ import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { postRepository } from '@/lib/repositories'
 import BlogList from '@/components/blog/BlogList'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Blog',
   description: 'All blog posts',

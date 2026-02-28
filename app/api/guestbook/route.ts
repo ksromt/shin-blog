@@ -6,6 +6,8 @@ import { createGuestbookSchema } from '@/lib/validations/guestbook';
 import { rateLimit } from '@/lib/api/rate-limit';
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic'
+
 export const GET = withErrorHandling(async () => {
   const entries = await guestbookRepository.findAll();
   return NextResponse.json({ entries });

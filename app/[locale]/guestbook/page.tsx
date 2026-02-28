@@ -5,7 +5,7 @@ import { guestbookRepository } from '@/lib/repositories';
 import GuestbookForm from "@/components/guestbook/GuestbookForm"
 import { formatDistanceToNow } from 'date-fns';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: "Guestbook | ~/blog",

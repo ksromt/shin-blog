@@ -3,6 +3,8 @@ import { postRepository } from '@/lib/repositories';
 import BlogPostCard from '@/components/blog/BlogPostCard';
 import HomeLayout from '@/components/home/HeroSection';
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   setRequestLocale(locale)

@@ -4,6 +4,8 @@ import { withErrorHandling, withAdmin, type RouteContext } from '@/lib/api/middl
 import { ApiError } from '@/lib/api/errors';
 import { updatePostSchema } from '@/lib/validations/post';
 
+export const dynamic = 'force-dynamic'
+
 export const GET = withErrorHandling(async (_request: NextRequest, context?: RouteContext) => {
   const { id } = await context!.params;
   const post = await postRepository.findById(id);

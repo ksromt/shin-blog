@@ -14,6 +14,8 @@ import BlogPostClient from './BlogPostClient'
 import { estimateReadingTime } from '@/lib/utils/reading-time'
 import { extractHeadings } from '@/lib/utils/headings'
 
+export const dynamic = 'force-dynamic'
+
 /**
  * Resolve a post by slug+locale first, then fall back to CUID lookup.
  * This enables human-readable URLs (/blog/hello-world) while keeping

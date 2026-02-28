@@ -2,6 +2,9 @@ import { postRepository } from '@/lib/repositories'
 import siteMetadata from '@/data/siteMetadata'
 import { escapeXml } from '@/lib/utils/xml'
 
+// Force dynamic rendering — RSS feed queries the DB
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const posts = await postRepository.findPublished()
 

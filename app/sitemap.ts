@@ -2,6 +2,9 @@ import { postRepository } from '@/lib/repositories'
 import siteMetadata from '@/data/siteMetadata'
 import { routing } from '@/i18n/routing'
 
+// Force dynamic rendering — sitemap queries the DB, which isn't available at build time
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap() {
   const posts = await postRepository.findPublished()
   const locales = routing.locales

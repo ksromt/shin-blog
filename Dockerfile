@@ -6,6 +6,10 @@ RUN npm ci --legacy-peer-deps
 
 COPY . .
 RUN npx prisma generate
+
+# Dummy DATABASE_URL for build — Next.js prerendering needs Prisma client to compile,
+# but no actual DB connection is made. Real URL is injected at runtime via docker-compose.
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npm run build
 
 FROM node:20-alpine AS runner

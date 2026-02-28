@@ -5,6 +5,8 @@ import { ApiError } from '@/lib/api/errors';
 import { createPostSchema } from '@/lib/validations/post';
 import { rateLimit } from '@/lib/api/rate-limit';
 
+export const dynamic = 'force-dynamic'
+
 export const GET = withErrorHandling(async () => {
   const posts = await postRepository.findPublished();
   return NextResponse.json({ posts });
