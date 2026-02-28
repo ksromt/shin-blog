@@ -1,41 +1,31 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { postRepository } from '@/lib/repositories';
-import { getServerSession } from 'next-auth/next';
-import { options } from '../auth/[...nextauth]/options';
-import { isAdmin } from '@/lib/auth-config';
+import { NextResponse } from 'next/server';
+import { postRepository, userRepository } from '@/lib/repositories';
+import { withErrorHandling, withAdmin } from '@/lib/api/middleware';
+import { ApiError } from '@/lib/api/errors';
+import { createPostSchema } from '@/lib/validations/post';
+import { rateLimit } from '@/lib/api/rate-limit';
 
-export async function GET() {
-  try {
-    const posts = await postRepository.findPublished();
-    return NextResponse.json({ posts }, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+export const GET = withErrorHandling(async () => {
+  const posts = await postRepository.findPublished();
+  return NextResponse.json({ posts });
+});
+
+export const POST = withAdmin(async (request, session) => {
+  if (!rateLimit(`posts:${session.user.email}`, 5, 60_000)) {
+    throw ApiError.tooManyRequests();
   }
-}
 
-export async function POST(request: NextRequest) {
-  try {
-    const session = await getServerSession(options);
+  const body = await request.json();
+  const data = createPostSchema.parse(body);
 
-    if (!session || !session.user || !isAdmin(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Only admin can create posts' },
-        { status: 403 }
-      );
-    }
+  // Derive authorId from session - never trust client
+  const user = await userRepository.findByEmail(session.user.email!);
+  if (!user) throw ApiError.notFound('User');
 
-    const body = await request.json();
-    const { title, content, authorId, tags, published } = body;
+  const post = await postRepository.create({
+    ...data,
+    authorId: user.id,
+  });
 
-    if (!title || !content || !authorId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    const post = await postRepository.create({ title, content, authorId, tags, published });
-    return NextResponse.json({ post }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating post:', error);
-    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
-  }
-}
+  return NextResponse.json({ post }, { status: 201 });
+});

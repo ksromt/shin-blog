@@ -1,81 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { postRepository } from '@/lib/repositories';
-import { getServerSession } from 'next-auth/next';
-import { options } from '../../auth/[...nextauth]/options';
-import { isAdmin } from '@/lib/auth-config';
+import { withErrorHandling, withAdmin, type RouteContext } from '@/lib/api/middleware';
+import { ApiError } from '@/lib/api/errors';
+import { updatePostSchema } from '@/lib/validations/post';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
+export const GET = withErrorHandling(async (_request: NextRequest, context?: RouteContext) => {
+  const { id } = await context!.params;
+  const post = await postRepository.findById(id);
+  if (!post) throw ApiError.notFound('Post');
+  return NextResponse.json({ post });
+});
 
-export async function GET(request: NextRequest, { params }: Params) {
-  try {
-    const { id } = params;
-    const post = await postRepository.findById(id);
+export const PATCH = withAdmin(async (request, _session, context?) => {
+  const { id } = await context!.params;
+  const body = await request.json();
+  const data = updatePostSchema.parse(body);
 
-    if (!post) {
-      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
-    }
+  const existingPost = await postRepository.findWithTags(id);
+  if (!existingPost) throw ApiError.notFound('Post');
 
-    return NextResponse.json({ post }, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching post:', error);
-    return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
-  }
-}
+  const updatedPost = await postRepository.update(id, data, existingPost.tags);
+  return NextResponse.json({ post: updatedPost });
+});
 
-export async function PATCH(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession(options);
+export const DELETE = withAdmin(async (_request, _session, context?) => {
+  const { id } = await context!.params;
 
-    if (!session || !session.user || !isAdmin(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Only admin can update posts' },
-        { status: 403 }
-      );
-    }
+  const exists = await postRepository.exists(id);
+  if (!exists) throw ApiError.notFound('Post');
 
-    const { id } = params;
-    const body = await request.json();
-    const { title, content, published, tags } = body;
-
-    const existingPost = await postRepository.findWithTags(id);
-    if (!existingPost) {
-      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
-    }
-
-    const updatedPost = await postRepository.update(id, { title, content, published, tags }, existingPost.tags);
-    return NextResponse.json({ post: updatedPost }, { status: 200 });
-  } catch (error) {
-    console.error('Error updating post:', error);
-    return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
-  }
-}
-
-export async function DELETE(request: NextRequest, { params }: Params) {
-  try {
-    const session = await getServerSession(options);
-
-    if (!session || !session.user || !isAdmin(session.user.email)) {
-      return NextResponse.json(
-        { error: 'Unauthorized: Only admin can delete posts' },
-        { status: 403 }
-      );
-    }
-
-    const { id } = params;
-
-    const exists = await postRepository.exists(id);
-    if (!exists) {
-      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
-    }
-
-    await postRepository.delete(id);
-    return NextResponse.json({ message: 'Post deleted successfully' }, { status: 200 });
-  } catch (error) {
-    console.error('Error deleting post:', error);
-    return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
-  }
-}
+  await postRepository.delete(id);
+  return NextResponse.json({ message: 'Post deleted successfully' });
+});

@@ -1,44 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { guestbookRepository, userRepository } from '@/lib/repositories';
-import { getServerSession } from 'next-auth';
-import { options } from '../auth/[...nextauth]/options';
+import { withErrorHandling, withAuth } from '@/lib/api/middleware';
+import { ApiError } from '@/lib/api/errors';
+import { createGuestbookSchema } from '@/lib/validations/guestbook';
+import { rateLimit } from '@/lib/api/rate-limit';
 import { revalidatePath } from 'next/cache';
 
-export async function GET() {
-  try {
-    const entries = await guestbookRepository.findAll();
-    return NextResponse.json({ entries });
-  } catch (error) {
-    console.error('Error fetching guestbook entries:', error);
-    return NextResponse.json({ error: 'Failed to fetch guestbook entries' }, { status: 500 });
+export const GET = withErrorHandling(async () => {
+  const entries = await guestbookRepository.findAll();
+  return NextResponse.json({ entries });
+});
+
+export const POST = withAuth(async (request, session) => {
+  if (!rateLimit(`guestbook:${session.user.email}`, 3, 60_000)) {
+    throw ApiError.tooManyRequests();
   }
-}
 
-export async function POST(request: NextRequest) {
-  try {
-    const session = await getServerSession(options);
+  const body = await request.json();
+  const data = createGuestbookSchema.parse(body);
 
-    if (!session || !session.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+  const user = await userRepository.findByEmail(session.user.email!);
+  if (!user) throw ApiError.notFound('User');
 
-    const { message } = await request.json();
+  const entry = await guestbookRepository.create({
+    message: data.message,
+    authorId: user.id,
+  });
 
-    if (!message) {
-      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
-    }
-
-    const user = await userRepository.findByEmail(session.user.email || '');
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    const entry = await guestbookRepository.create({ message, authorId: user.id });
-
-    revalidatePath('/guestbook');
-    return NextResponse.json({ entry }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating guestbook entry:', error);
-    return NextResponse.json({ error: 'Failed to create guestbook entry' }, { status: 500 });
-  }
-}
+  revalidatePath('/guestbook');
+  return NextResponse.json({ entry }, { status: 201 });
+});

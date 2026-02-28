@@ -6,8 +6,6 @@ const config: Config = {
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -19,6 +17,10 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -28,26 +30,6 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          100: '#FDD1D9',
-          200: '#FBA4BC',
-          300: '#F575A5',
-          400: '#F472B6',
-          500: '#DE1D8D',
-          600: '#BE1588',
-          700: '#9F0E7F',
-          800: '#800972',
-          900: '#6A0568',
-        },
-        'primary-dark': {
-          100: '#FDD1D9',
-          200: '#FBA4BC',
-          300: '#F575A5',
-          400: '#F472B6',
-          500: '#DE1D8D',
-          600: '#BE1588',
-          700: '#9F0E7F',
-          800: '#800972',
-          900: '#6A0568',
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

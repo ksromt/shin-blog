@@ -36,3 +36,12 @@ next-env.d.ts
 # Docs
 /Docs/AskLog/
 /Docs/FeatureMap.md
+
+# Test screenshots
+/screenshots/
+
+# Prisma generated client (platform-specific, regenerated via `npx prisma generate`)
+lib/generated/
+
+# Claude Code internal data
+.claude/

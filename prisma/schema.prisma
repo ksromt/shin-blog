@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// NextAuth 模型
+// NextAuth models
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -54,7 +54,7 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// 用户模型
+// User model
 model User {
   id            String     @id @default(cuid())
   name          String?
@@ -72,7 +72,7 @@ model User {
   @@map("users")
 }
 
-// 博客相关模型
+// Blog-related models
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -111,7 +111,7 @@ model Tag {
   @@map("tags")
 }
 
-// 留言簿模型
+// Guestbook model
 model Guestbook {
   id        String   @id @default(cuid())
   message   String

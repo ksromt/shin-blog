@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: shinblog-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: shin_blog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Blog
+  blog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shinblog-app
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-postgres}@postgres:5432/shin_blog
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      RAG_API_URL: http://rag-api:8001
+      KOCLAW_GATEWAY_URL: ${KOCLAW_GATEWAY_URL:-}
+      NEXT_PUBLIC_KOCLAW_WS_URL: ${NEXT_PUBLIC_KOCLAW_WS_URL:-}
+      NEXT_PUBLIC_KOCLAW_ASSETS_URL: ${NEXT_PUBLIC_KOCLAW_ASSETS_URL:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # RAG API (Rust Doc Assistant)
+  rag-api:
+    build:
+      context: ../RAG
+      dockerfile: Dockerfile.api
+    container_name: shinblog-rag
+    ports:
+      - "8001:8001"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    volumes:
+      - ../RAG/chroma_db:/app/chroma_db
+      - ../RAG/data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
