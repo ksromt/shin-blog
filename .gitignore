@@ -33,9 +33,8 @@ next-env.d.ts
 .specstory/
 .specstory/.what-is-this.md
 
-# Docs
-/Docs/AskLog/
-/Docs/FeatureMap.md
+# Docs (internal development notes, not published)
+/Docs/
 
 # Test screenshots
 /screenshots/
@@ -45,3 +44,7 @@ lib/generated/
 
 # Claude Code internal data
 .claude/
+
+
+personal.md
+
