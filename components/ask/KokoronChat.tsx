@@ -188,9 +188,9 @@ export default function KokoronChat() {
                       components={{
                         p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                         strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-                        ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
-                        ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
-                        li: ({ children }) => <li className="ml-1">{children}</li>,
+                        ul: ({ children }) => <ul className="list-disc pl-5 mb-2 space-y-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-5 mb-2 space-y-1">{children}</ol>,
+                        li: ({ children }) => <li>{children}</li>,
                         a: ({ href, children }) => (
                           <a href={href} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                             {children}
