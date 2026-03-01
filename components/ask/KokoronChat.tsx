@@ -79,9 +79,11 @@ export default function KokoronChat() {
             } catch {
               accumulated += data
             }
+            // Fix numbered list formatting: "1.\n**Title**" → "1. **Title**"
+            const cleaned = accumulated.replace(/(\d+\.)\s*\n+(\s*\*\*)/g, '$1 $2')
             setMessages((prev) => {
               const updated = [...prev]
-              updated[updated.length - 1] = { role: 'assistant', content: accumulated }
+              updated[updated.length - 1] = { role: 'assistant', content: cleaned }
               return updated
             })
           }
