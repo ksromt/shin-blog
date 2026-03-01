@@ -74,7 +74,11 @@ export default function KokoronChat() {
           if (line.startsWith('data: ')) {
             const data = line.slice(6)
             if (data === '[DONE]') continue
-            accumulated += data
+            try {
+              accumulated += JSON.parse(data)
+            } catch {
+              accumulated += data
+            }
             setMessages((prev) => {
               const updated = [...prev]
               updated[updated.length - 1] = { role: 'assistant', content: accumulated }
