@@ -82,7 +82,7 @@ export default function KokoronChat() {
             // Fix numbered list formatting: collapse "N.\n" onto same line as title
             const cleaned = accumulated
               .replace(/(\d+\.)\s*\n+(\s*\*\*)/g, '$1 $2')  // "1.\n**Title" → "1. **Title"
-              .replace(/(\d+\.)\s*\n+(\s*[A-Za-Z\u3000-\u9fff\u4e00-\u9fff])/g, '$1 $2')  // "1.\nTitle" → "1. Title" (no bold)
+              .replace(/(\d+\.)\s*\n+(\s*[A-Za-z\u3000-\u9fff])/g, '$1 $2')  // "1.\nTitle" → "1. Title" (no bold)
             setMessages((prev) => {
               const updated = [...prev]
               updated[updated.length - 1] = { role: 'assistant', content: cleaned }
