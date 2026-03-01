@@ -124,7 +124,7 @@
     "emptyDesc": "关于博客文章、项目等任何问题都可以问Kokoron。基于RAG技术。",
     "exQ1": "这个博客涵盖哪些主题？",
     "exQ2": "介绍一下Shin的项目",
-    "exQ3": "这个网站使用了什么技术栈？",
+    "exQ3": "可以介绍下Shin目前的个人技术栈吗？",
     "exQ4": "总结一下最近的博客文章",
     "inputPlaceholder": "向Kokoron提问...",
     "clear": "清除",

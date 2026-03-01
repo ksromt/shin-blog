@@ -124,7 +124,7 @@
     "emptyDesc": "Ask Kokoron anything about this blog — posts, projects, and more. Powered by RAG.",
     "exQ1": "What topics does this blog cover?",
     "exQ2": "Tell me about Shin's projects",
-    "exQ3": "What tech stack is used here?",
+    "exQ3": "What is Shin's current personal tech stack?",
     "exQ4": "Summarize recent blog posts",
     "inputPlaceholder": "Ask Kokoron a question...",
     "clear": "Clear",
