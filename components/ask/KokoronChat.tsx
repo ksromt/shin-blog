@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, Trash2, Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useLocale, useTranslations } from 'next-intl'
@@ -171,7 +173,32 @@ export default function KokoronChat() {
                     : 'bg-muted'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                {message.role === 'assistant' ? (
+                  <div className="text-sm chat-markdown">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                        ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
+                        li: ({ children }) => <li className="ml-1">{children}</li>,
+                        a: ({ href, children }) => (
+                          <a href={href} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                            {children}
+                          </a>
+                        ),
+                        code: ({ children }) => (
+                          <code className="bg-background/50 px-1 py-0.5 rounded text-xs font-mono">{children}</code>
+                        ),
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                )}
                 {message.role === 'assistant' && !message.content && isLoading && (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 )}
