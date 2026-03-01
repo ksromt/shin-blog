@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, Trash2, Loader2, BookOpen } from 'lucide-react'
+import { Send, Trash2, Loader2 } from 'lucide-react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useLocale, useTranslations } from 'next-intl'
@@ -47,6 +48,9 @@ export default function KokoronChat() {
         body: JSON.stringify({ question, language: locale }),
       })
 
+      if (response.status === 429) {
+        throw new Error('RATE_LIMITED')
+      }
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`)
       }
@@ -77,12 +81,16 @@ export default function KokoronChat() {
           }
         }
       }
-    } catch {
+    } catch (error) {
+      const errorMsg =
+        error instanceof Error && error.message === 'RATE_LIMITED'
+          ? t('rateLimited')
+          : t('errorMessage')
       setMessages((prev) => {
         const updated = [...prev]
         updated[updated.length - 1] = {
           role: 'assistant',
-          content: t('errorMessage'),
+          content: errorMsg,
         }
         return updated
       })
@@ -116,7 +124,14 @@ export default function KokoronChat() {
       <div className="flex-1 overflow-y-auto space-y-4 mb-4 border rounded-lg p-4">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <BookOpen className="h-12 w-12 text-muted-foreground/30 mb-4" />
+            <div className="relative h-16 w-16 mb-4">
+              <Image
+                src="/kokoron/kokoron1.png"
+                alt="Kokoron"
+                fill
+                className="rounded-full object-cover"
+              />
+            </div>
             <h3 className="text-lg font-semibold mb-2">{t('emptyTitle')}</h3>
             <p className="text-sm text-muted-foreground mb-6 max-w-md">
               {t('emptyDesc')}
@@ -137,10 +152,20 @@ export default function KokoronChat() {
           messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} gap-2`}
             >
+              {message.role === 'assistant' && (
+                <div className="relative h-8 w-8 flex-shrink-0 mt-1">
+                  <Image
+                    src="/kokoron/kokoron1.png"
+                    alt="Kokoron"
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+              )}
               <div
-                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                className={`max-w-[75%] rounded-lg px-4 py-2 ${
                   message.role === 'user'
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-muted'

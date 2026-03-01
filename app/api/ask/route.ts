@@ -12,7 +12,7 @@ const querySchema = z.object({
 export async function POST(request: Request) {
   try {
     const clientIp = getClientIp(request);
-    if (!rateLimit(`ask:${clientIp}`, 10, 60_000)) {
+    if (!rateLimit(`ask:${clientIp}`, 30, 30 * 60_000)) {
       throw ApiError.tooManyRequests();
     }
 

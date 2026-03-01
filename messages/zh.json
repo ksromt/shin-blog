@@ -16,7 +16,7 @@
   "Home": {
     "greeting": "欢迎来到",
     "name": "Shin's Blog",
-    "welcome": "我是庆应义塾大学理工学研究科信息工学专业的硕士一年级学生。",
+    "welcome": "我是庆应义塾大学理工学研究科计算机科学专业的硕士一年级学生。",
     "freeTime": "课余时间，我喜欢做AI相关的研究、开发个人项目，以及探索新技术。",
     "kokoronIntro": "另外，<kokoronLink>Kokoron</kokoronLink>是我的AI助手！关于本博客的任何问题都可以直接向它提问，也欢迎<contactLink>联系我</contactLink>！",
     "reflection": "这里是我记录",
@@ -59,11 +59,11 @@
   "About": {
     "title": "关于我",
     "name": "鑫",
-    "intro": "你好，我是<strong>鑫</strong>，庆应义塾大学理工学研究科信息工学专业的硕士一年级学生。研究方向是软件工程、软件测试、机器学习的研究与应用，以及大语言模型的研究与应用。",
+    "intro": "你好，我是<strong>鑫</strong>，庆应义塾大学理工学研究科计算机科学专业的硕士一年级学生。研究方向是软件工程、软件测试、机器学习的研究与应用，以及大语言模型的研究与应用。",
     "freeTime": "研究之余，我喜欢开发各种项目——从全栈Web应用到AI驱动的工具。我对新技术始终保持好奇，也乐于通过这个博客分享我的学习心得。",
     "skills": "技能",
     "experience": "经历与教育",
-    "masterTitle": "硕士 信息工学专攻 — 庆应义塾大学 理工学研究科",
+    "masterTitle": "硕士 计算机科学专攻 — 庆应义塾大学 理工学研究科",
     "masterPeriod": "2025.4 — 2027.3（预计）",
     "masterDesc": "研究方向：软件工程、软件测试、机器学习、大语言模型。",
     "bachelorTitle": "学士 计算机科学 — 吉林大学珠海学院",
@@ -128,7 +128,8 @@
     "exQ4": "总结一下最近的博客文章",
     "inputPlaceholder": "向Kokoron提问...",
     "clear": "清除",
-    "errorMessage": "抱歉，遇到了错误。请确认AI助手服务正在运行后重试。"
+    "errorMessage": "抱歉，遇到了错误。请确认AI助手服务正在运行后重试。",
+    "rateLimited": "您已达到提问上限（30次）。请30分钟后再试，或直接联系管理员Shin。"
   },
   "Guestbook": {
     "title": "留言簿",

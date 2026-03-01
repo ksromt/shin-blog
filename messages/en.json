@@ -16,7 +16,7 @@
   "Home": {
     "greeting": "Welcome to",
     "name": "Shin's Blog",
-    "welcome": "I'm a first-year Master's student in the Department of Information and Computer Science at Keio University.",
+    "welcome": "I'm a first-year Master's student in Computer Science at Keio University.",
     "freeTime": "When I'm not studying, I enjoy AI research, building side projects, and picking up new technologies.",
     "kokoronIntro": "Also, meet <kokoronLink>Kokoron</kokoronLink> — my AI assistant! Ask it anything about this blog, or <contactLink>get in touch</contactLink> with me directly.",
     "reflection": "This is my space for",
@@ -59,11 +59,11 @@
   "About": {
     "title": "About Me",
     "name": "Shin",
-    "intro": "Hi, I'm <strong>Shin</strong> — a first-year Master's student in the Department of Information and Computer Science at Keio University. My research focuses on software engineering, software testing, the research and application of machine learning, and the research and application of large language models.",
+    "intro": "Hi, I'm <strong>Shin</strong> — a first-year Master's student in Computer Science at Keio University. My research focuses on software engineering, software testing, the research and application of machine learning, and the research and application of large language models.",
     "freeTime": "Outside of research, I love building things — from full-stack web apps to AI-powered tools. I'm always curious about new technologies and enjoy sharing what I learn through this blog.",
     "skills": "Skills",
     "experience": "Experience & Education",
-    "masterTitle": "M.S. Information and Computer Science — Keio University",
+    "masterTitle": "M.S. Computer Science — Keio University",
     "masterPeriod": "2025.4 — 2027.3 (expected)",
     "masterDesc": "Research in software engineering, software testing, machine learning, and large language models.",
     "bachelorTitle": "B.S. Computer Science — Jilin University Zhuhai College",
@@ -128,7 +128,8 @@
     "exQ4": "Summarize recent blog posts",
     "inputPlaceholder": "Ask Kokoron a question...",
     "clear": "Clear",
-    "errorMessage": "Sorry, I encountered an error. Please make sure the AI assistant service is running and try again."
+    "errorMessage": "Sorry, I encountered an error. Please make sure the AI assistant service is running and try again.",
+    "rateLimited": "You have reached the question limit (30 questions). Please try again in 30 minutes or contact the admin Shin directly."
   },
   "Guestbook": {
     "title": "Guestbook",
