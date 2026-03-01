@@ -1,8 +1,8 @@
 const siteMetadata = {
-  title: "Personal Blog",
+  title: "arcadiaKokoro",
   author: "Shin",
   headerTitle: "~/blog",
-  description: "A personal blog built with Next.js and Tailwind CSS",
+  description: "Where tech, research, and life converge — Shin's arcadia",
   language: "en-us",
   theme: "system",
   siteUrl: "https://arcadiakokoro.com",
