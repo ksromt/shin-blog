@@ -82,6 +82,8 @@
     "demo": "演示",
     "tryIt": "试试看",
     "otherProjects": "其他项目",
+    "koclawTitle": "Koclaw",
+    "koclawDesc": "安全的自托管AI Agent框架。Rust Gateway + Python Agent架构 — 一个AI人格覆盖Telegram、QQ、Discord、桌面和Web。具备端到端加密、27个MCP工具、语音管线和cron调度器。",
     "ragTitle": "RAG研究",
     "ragDesc": "为学习检索增强生成（RAG）技术而开发的问答系统。使用LangChain、ChromaDB和OpenAI，基于Rust文档实现问答功能。支持英语、日语和中文。",
     "shinBlogTitle": "shinBlog",

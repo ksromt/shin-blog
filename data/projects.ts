@@ -13,6 +13,15 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'koclaw',
+    titleKey: 'koclawTitle',
+    descKey: 'koclawDesc',
+    technologies: ['Rust', 'Python', 'Tokio', 'WebSocket', 'ChaCha20', 'MCP', 'GPT-SoVITS', 'Docker'],
+    github: 'https://github.com/ksromt/koclaw',
+    demo: null,
+    featured: true,
+  },
+  {
     id: 'rag-research',
     titleKey: 'ragTitle',
     descKey: 'ragDesc',

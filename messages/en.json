@@ -82,6 +82,8 @@
     "demo": "Demo",
     "tryIt": "Try it",
     "otherProjects": "Other Projects",
+    "koclawTitle": "Koclaw",
+    "koclawDesc": "A secure, self-hosted AI Agent framework. Rust gateway + Python agent — one AI persona across Telegram, QQ, Discord, desktop, and web. Features E2E encryption, 27 MCP tools, voice pipeline, and cron scheduler.",
     "ragTitle": "RAG Research",
     "ragDesc": "A RAG-based Q&A system built as a learning project to explore retrieval-augmented generation. Uses LangChain, ChromaDB, and OpenAI to answer questions from Rust documentation. Supports English, Japanese, and Chinese.",
     "shinBlogTitle": "shinBlog",

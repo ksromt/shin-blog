@@ -82,6 +82,8 @@
     "demo": "デモ",
     "tryIt": "試す",
     "otherProjects": "その他のプロジェクト",
+    "koclawTitle": "Koclaw",
+    "koclawDesc": "安全なセルフホスト型AIエージェントフレームワーク。Rust Gateway + Python Agent構成 — 一つのAIペルソナでTelegram、QQ、Discord、デスクトップ、Webに対応。E2E暗号化、27のMCPツール、音声パイプライン、cronスケジューラを搭載。",
     "ragTitle": "RAG研究",
     "ragDesc": "検索拡張生成（RAG）を学ぶために開発したQ&Aシステム。LangChain、ChromaDB、OpenAIを使い、Rustドキュメントに基づいた質問応答を実現。英語・日本語・中国語に対応。",
     "shinBlogTitle": "shinBlog",
