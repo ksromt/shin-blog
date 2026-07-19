@@ -52,7 +52,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
       <div className="space-y-12 mt-8">
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post) => (
-            <article key={post.id} className="space-y-2">
+            <article key={post.id} className="group space-y-2">
               <div className="flex items-center text-sm text-muted-foreground">
                 <span>{formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}</span>
                 <span className="mx-2">&bull;</span>
@@ -60,7 +60,7 @@ export default function BlogList({ posts }: { posts: BlogPost[] }) {
               </div>
 
               <Link href={`/blog/${post.slug || post.id}`} className="block">
-                <h2 className="text-2xl font-semibold hover:underline">{post.title}</h2>
+                <h2 className="text-2xl font-semibold transition-colors group-hover:text-primary">{post.title}</h2>
               </Link>
 
               <div className="flex flex-wrap gap-2">

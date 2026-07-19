@@ -5,15 +5,19 @@ export interface Heading {
 }
 
 /**
- * Extract headings (h1-h3) from markdown content.
+ * Extract headings (h2-h3) from markdown content.
+ * h1 is excluded (it is the article title, rendered by the page header).
+ * Fenced code blocks are stripped first so `# comment` lines inside code
+ * samples don't become phantom TOC entries.
  * Returns an array of { level, text, id } objects for table of contents.
  */
 export function extractHeadings(content: string): Heading[] {
-  const headingRegex = /^(#{1,3})\s+(.+)$/gm;
+  const source = content.replace(/```[\s\S]*?```/g, '');
+  const headingRegex = /^(#{2,3})\s+(.+)$/gm;
   const headings: Heading[] = [];
   const usedIds = new Set<string>();
   let match;
-  while ((match = headingRegex.exec(content)) !== null) {
+  while ((match = headingRegex.exec(source)) !== null) {
     const text = match[2].trim();
     let id = text
       .toLowerCase()

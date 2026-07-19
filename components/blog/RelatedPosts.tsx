@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 
@@ -26,7 +26,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
           <Link
             key={post.id}
             href={`/blog/${post.slug || post.id}`}
-            className="block p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+            className="block p-4 border rounded-lg transition-colors hover:bg-muted/50 hover:border-primary/40"
           >
             <h3 className="font-medium mb-1 line-clamp-2">{post.title}</h3>
             <div className="flex flex-wrap gap-1">

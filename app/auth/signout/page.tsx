@@ -22,12 +22,12 @@ export default function SignOutPage() {
 
   return (
     <div className="container mx-auto flex items-center justify-center min-h-[70vh]">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md text-center">
+      <div className="w-full max-w-md p-8 space-y-8 bg-card border border-border rounded-lg shadow-md text-center">
         <h1 className="text-3xl font-bold">退出登录</h1>
         
         {session?.user ? (
           <div className="mt-4">
-            <p className="text-gray-700 mb-6">
+            <p className="text-muted-foreground mb-6">
               您确定要退出账户 <strong>{session.user.name || session.user.email}</strong> 吗？
             </p>
             
@@ -50,7 +50,7 @@ export default function SignOutPage() {
           </div>
         ) : (
           <div className="mt-4">
-            <p className="text-gray-700 mb-6">
+            <p className="text-muted-foreground mb-6">
               您当前未登录
             </p>
             

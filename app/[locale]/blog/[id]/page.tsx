@@ -5,10 +5,10 @@ import { ArrowLeft, Clock } from "lucide-react"
 import { notFound } from "next/navigation"
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import { postRepository } from '@/lib/repositories'
-import { formatDistanceToNow } from 'date-fns'
 import MarkdownRenderer from '@/components/shared/MarkdownRenderer'
 import TableOfContents from '@/components/blog/TableOfContents'
 import RelatedPosts from '@/components/blog/RelatedPosts'
+import ReadingProgress from '@/components/blog/ReadingProgress'
 import siteMetadata from '@/data/siteMetadata'
 import BlogPostClient from './BlogPostClient'
 import { estimateReadingTime } from '@/lib/utils/reading-time'
@@ -70,9 +70,16 @@ export default async function BlogPost({ params }: { params: Promise<{ locale: s
     notFound()
   }
 
-  const readingTime = estimateReadingTime(post.content)
-  const headings = extractHeadings(post.content)
+  // The leading markdown H1 duplicates the title rendered by the page header —
+  // strip it so it doesn't appear twice (and stays out of the TOC).
+  const body = post.content.replace(/^\s*#\s[^\n]*\n+/, '')
+
+  const readingTime = estimateReadingTime(body)
+  const headings = extractHeadings(body)
   const postUrl = `${siteMetadata.siteUrl}/blog/${post.slug || post.id}`
+  const publishedDate = new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(
+    new Date(post.createdAt)
+  )
 
   // Find related posts by shared tags (same locale)
   const allPosts = await postRepository.findPublished(undefined, locale)
@@ -102,18 +109,19 @@ export default async function BlogPost({ params }: { params: Promise<{ locale: s
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <article className="max-w-3xl mx-auto">
+        <ReadingProgress />
         <Link href="/blog" className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-8">
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('backToAll')}
         </Link>
 
-        <div className="space-y-2 mb-8">
-          <h1 className="text-3xl font-bold">{post.title}</h1>
+        <div className="space-y-3 mb-8">
+          <h1 className="font-display text-3xl sm:text-4xl font-extrabold leading-[1.25]">{post.title}</h1>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>
-              {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
-            </span>
+            <time dateTime={new Date(post.createdAt).toISOString()}>
+              {publishedDate}
+            </time>
             <span>by {post.author.name}</span>
             <span className="flex items-center gap-1">
               <Clock className="h-3.5 w-3.5" />
@@ -134,9 +142,7 @@ export default async function BlogPost({ params }: { params: Promise<{ locale: s
 
         <TableOfContents headings={headings} />
 
-        <div className="prose prose-neutral dark:prose-invert max-w-none">
-          <MarkdownRenderer content={post.content} />
-        </div>
+        <MarkdownRenderer content={body} />
 
         <RelatedPosts posts={relatedPosts} />
       </article>

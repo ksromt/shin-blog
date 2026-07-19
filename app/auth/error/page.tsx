@@ -27,9 +27,9 @@ function AuthErrorContent() {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center min-h-[70vh]">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md text-center">
-        <h1 className="text-3xl font-bold text-red-600">登录失败</h1>
-        <p className="mt-4 text-gray-700">{errorMessage}</p>
+      <div className="w-full max-w-md p-8 space-y-8 bg-card border border-border rounded-lg shadow-md text-center">
+        <h1 className="text-3xl font-bold text-destructive">登录失败</h1>
+        <p className="mt-4 text-muted-foreground">{errorMessage}</p>
         
         <div className="mt-8 space-y-4">
           <Button 
@@ -55,8 +55,8 @@ export default function AuthErrorPage() {
   return (
     <Suspense fallback={
       <div className="container mx-auto flex flex-col items-center justify-center min-h-[70vh]">
-        <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md text-center">
-          <h1 className="text-3xl font-bold text-red-600">加载中...</h1>
+        <div className="w-full max-w-md p-8 space-y-8 bg-card border border-border rounded-lg shadow-md text-center">
+          <h1 className="text-3xl font-bold text-destructive">加载中...</h1>
         </div>
       </div>
     }>

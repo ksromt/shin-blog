@@ -36,6 +36,8 @@
     "copyEmail": "コピー",
     "emailCopied": "コピー済み！",
     "latestPosts": "最新の記事",
+    "latestPostsEyebrow": "ブログ",
+    "viewAll": "すべて見る",
     "noPostsYet": "まだ記事がありません",
     "noPostsDescription": "記事が公開されるとここに表示されます。"
   },

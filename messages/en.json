@@ -36,6 +36,8 @@
     "copyEmail": "Copy",
     "emailCopied": "Copied!",
     "latestPosts": "Latest Posts",
+    "latestPostsEyebrow": "Blog",
+    "viewAll": "View all",
     "noPostsYet": "No posts yet",
     "noPostsDescription": "Blog posts will appear here once they are published."
   },

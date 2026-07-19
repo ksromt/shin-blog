@@ -25,6 +25,13 @@
     --input: 30 15% 88%;
     --ring: 16 80% 55%;
     --radius: 0.75rem;
+    --success: 150 60% 32%;
+    /* Code blocks stay warm-dark in both themes (editorial choice) */
+    --code-bg: 20 12% 10%;
+    /* Warm analogous accent ramp: coral → rose → gold */
+    --glow-a: 16 80% 55%;
+    --glow-b: 350 75% 55%;
+    --glow-c: 35 85% 55%;
   }
 
   .dark {
@@ -48,6 +55,11 @@
     --border: 20 10% 18%;
     --input: 20 10% 18%;
     --ring: 16 75% 60%;
+    --success: 150 45% 55%;
+    --code-bg: 20 12% 10%;
+    --glow-a: 16 75% 60%;
+    --glow-b: 350 70% 62%;
+    --glow-c: 35 80% 60%;
   }
 }
 
@@ -58,6 +70,38 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Consistent keyboard focus ring on hand-rolled interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  [role='button']:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  /* CJK line-breaking + comfortable leading for JA/ZH prose */
+  :lang(ja),
+  :lang(zh) {
+    line-break: strict;
+    overflow-wrap: break-word;
+  }
+  :lang(ja) .prose :where(p, li),
+  :lang(zh) .prose :where(p, li) {
+    line-height: 1.9;
+  }
+  /* zh pages prefer Simplified Chinese glyph forms */
+  :lang(zh) body {
+    font-family: var(--font-inter), var(--font-noto-sans-sc), system-ui, sans-serif;
+  }
+}
+
+/* Code blocks own their background via the --code-bg token */
+.hljs {
+  background: transparent !important;
 }
 
 /* Link underline animation */
@@ -98,5 +142,21 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+/* Vestibular-safety kill switch (WCAG 2.2.2) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .Typewriter__cursor {
+    animation: none;
+    opacity: 1;
   }
 }

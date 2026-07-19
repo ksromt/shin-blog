@@ -17,7 +17,7 @@ export default async function TableOfContents({ headings }: TableOfContentsProps
       </h2>
       <ul className="space-y-1">
         {headings.map((heading) => (
-          <li key={heading.id} style={{ paddingLeft: `${(heading.level - 1) * 16}px` }}>
+          <li key={heading.id} style={{ paddingLeft: `${(heading.level - 2) * 16}px` }}>
             <a
               href={`#${heading.id}`}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"

@@ -59,9 +59,9 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <SectionContainer>
-          <div className="flex h-screen flex-col justify-between">
+          <div className="flex min-h-screen flex-col">
             <Navigation />
-            <main className="mb-auto">{children}</main>
+            <main className="flex-1">{children}</main>
             <Footer />
           </div>
         </SectionContainer>

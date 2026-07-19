@@ -18,7 +18,8 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-inter)', 'var(--font-noto-sans-jp)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-zen-kaku)', 'var(--font-inter)', 'var(--font-noto-sans-jp)', 'sans-serif'],
         serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       },
       colors: {
@@ -55,6 +56,13 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        success: "hsl(var(--success))",
+        codebg: "hsl(var(--code-bg))",
+        glow: {
+          a: "hsl(var(--glow-a))",
+          b: "hsl(var(--glow-b))",
+          c: "hsl(var(--glow-c))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -66,15 +74,40 @@ const config: Config = {
           '0%, 100%': { transform: 'rotate(-1deg)' },
           '50%': { transform: 'rotate(1deg)' },
         },
+        'fade-up': {
+          from: { opacity: '0', transform: 'translateY(12px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'highlight-in': {
+          from: { transform: 'scaleX(0)' },
+          to: { transform: 'scaleX(1)' },
+        },
       },
       animation: {
         tilt: 'tilt 10s infinite linear',
+        'fade-up': 'fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'highlight-in': 'highlight-in 0.6s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both',
       },
       typography: {
         DEFAULT: {
           css: {
             maxWidth: "100%",
             color: "hsl(var(--foreground))",
+            "--tw-prose-body": "hsl(var(--foreground))",
+            "--tw-prose-headings": "hsl(var(--foreground))",
+            "--tw-prose-lead": "hsl(var(--muted-foreground))",
+            "--tw-prose-bold": "hsl(var(--foreground))",
+            "--tw-prose-bullets": "hsl(var(--muted-foreground))",
+            "--tw-prose-counters": "hsl(var(--muted-foreground))",
+            "--tw-prose-hr": "hsl(var(--border))",
+            "--tw-prose-quotes": "hsl(var(--muted-foreground))",
+            "--tw-prose-quote-borders": "hsl(var(--border))",
+            "--tw-prose-captions": "hsl(var(--muted-foreground))",
+            "--tw-prose-th-borders": "hsl(var(--border))",
+            "--tw-prose-td-borders": "hsl(var(--border))",
+            "code::before": { content: "none" },
+            "code::after": { content: "none" },
+            "li::marker": { color: "hsl(var(--muted-foreground))" },
             a: {
               color: "hsl(var(--primary))",
               "&:hover": {

@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
-import { Children, isValidElement } from 'react';
+import { Children, isValidElement, useRef, useState } from 'react';
 
 interface MarkdownRendererProps {
   content: string;
@@ -37,42 +37,103 @@ function extractText(node: React.ReactNode): string {
   return Children.toArray(props.children).map(extractText).join('');
 }
 
+/** Hover-revealed anchor link so readers can grab a section URL. */
+function HeadingAnchor({ id }: { id: string }) {
+  return (
+    <a
+      href={`#${id}`}
+      aria-label="Link to section"
+      className="ml-2 text-primary no-underline opacity-0 transition-opacity group-hover:opacity-100"
+    >
+      #
+    </a>
+  );
+}
+
+/**
+ * Fenced code block with language label and copy button.
+ * The surface stays warm-dark in both themes (bg-codebg token);
+ * internal chrome uses fixed white-alpha since the surface is always dark.
+ */
+function CodeBlock({ children }: { children: React.ReactNode }) {
+  const [copied, setCopied] = useState(false);
+  const preRef = useRef<HTMLPreElement>(null);
+
+  const child = Children.toArray(children)[0];
+  const lang = isValidElement(child)
+    ? /language-(\w+)/.exec((child.props as { className?: string }).className || '')?.[1]
+    : undefined;
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(preRef.current?.innerText ?? '');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="not-prose my-6 overflow-hidden rounded-lg border border-border bg-codebg">
+      <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-4 py-1.5">
+        <span className="font-mono text-xs text-white/50">{lang ?? 'text'}</span>
+        <button
+          onClick={copy}
+          className="text-xs text-white/50 transition-colors hover:text-white"
+        >
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+      </div>
+      <pre ref={preRef} className="m-0 overflow-x-auto p-4 text-sm leading-relaxed">
+        {children}
+      </pre>
+    </div>
+  );
+}
+
 export default function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
   return (
-    <div className={`prose prose-neutral dark:prose-invert max-w-none ${className}`}>
+    <div className={`prose mx-auto max-w-[70ch] ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
-          // Custom component overrides for better styling
-          h1: ({ children }) => (
-            <h1 id={getHeadingId(children)} className="text-3xl font-bold mb-6 mt-8 first:mt-0 border-b border-border pb-2">
-              {children}
-            </h1>
-          ),
-          h2: ({ children }) => (
-            <h2 id={getHeadingId(children)} className="text-2xl font-semibold mb-4 mt-8 first:mt-0 border-b border-border pb-1">
-              {children}
-            </h2>
-          ),
-          h3: ({ children }) => (
-            <h3 id={getHeadingId(children)} className="text-xl font-semibold mb-3 mt-6 first:mt-0">
-              {children}
-            </h3>
-          ),
-          code: ({ className, children, ...props }) => {
-            const match = /language-(\w+)/.exec(className || '');
-
-            if (match) {
+          // Body h1 is demoted to h2 scale: the page header owns the single
+          // canonical <h1> (post title), so an in-body `#` is a section heading.
+          h1: ({ children }) => {
+            const id = getHeadingId(children);
+            return (
+              <h2 id={id} className="group scroll-mt-8 text-2xl font-semibold mb-4 mt-8 first:mt-0 border-b border-border pb-1">
+                {children}
+                <HeadingAnchor id={id} />
+              </h2>
+            );
+          },
+          h2: ({ children }) => {
+            const id = getHeadingId(children);
+            return (
+              <h2 id={id} className="group scroll-mt-8 text-2xl font-semibold mb-4 mt-8 first:mt-0 border-b border-border pb-1">
+                {children}
+                <HeadingAnchor id={id} />
+              </h2>
+            );
+          },
+          h3: ({ children }) => {
+            const id = getHeadingId(children);
+            return (
+              <h3 id={id} className="group scroll-mt-8 text-xl font-semibold mb-3 mt-6 first:mt-0">
+                {children}
+                <HeadingAnchor id={id} />
+              </h3>
+            );
+          },
+          pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
+          code: ({ className: codeClassName, children, ...props }) => {
+            // Fenced blocks keep their hljs classes; CodeBlock owns the container.
+            if (/language-/.test(codeClassName || '')) {
               return (
-                <pre className={`${className} overflow-x-auto rounded-lg border border-border`}>
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                </pre>
+                <code className={codeClassName} {...props}>
+                  {children}
+                </code>
               );
             }
-
             return (
               <code
                 className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono"
@@ -105,30 +166,32 @@ export default function MarkdownRenderer({ content, className = '' }: MarkdownRe
             </td>
           ),
           ul: ({ children }) => (
-            <ul className="list-disc list-inside my-4 space-y-2">
+            <ul className="list-disc list-outside pl-6 my-4 space-y-2">
               {children}
             </ul>
           ),
           ol: ({ children }) => (
-            <ol className="list-decimal list-inside my-4 space-y-2">
+            <ol className="list-decimal list-outside pl-6 my-4 space-y-2">
               {children}
             </ol>
           ),
           li: ({ children }) => (
-            <li className="ml-4">
+            <li className="leading-relaxed [&>p]:my-0">
               {children}
             </li>
           ),
-          a: ({ href, children }) => (
-            <a
-              href={href}
-              className="text-primary hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {children}
-            </a>
-          ),
+          a: ({ href, children }) => {
+            const external = /^https?:\/\//.test(href ?? '');
+            return (
+              <a
+                href={href}
+                className="text-primary hover:underline"
+                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {children}
+              </a>
+            );
+          },
           img: ({ src, alt }) => (
             <img
               src={src}

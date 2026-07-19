@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Noto_Sans_JP, Noto_Sans_SC, Zen_Kaku_Gothic_New } from "next/font/google"
+import { getLocale } from "next-intl/server"
 import "./globals.css"
 import { Providers } from '@/components/providers/Providers'
 import siteMetadata from "@/data/siteMetadata"
@@ -9,6 +10,32 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+})
+
+// CJK fonts ship as unicode-range slices — browsers fetch only the needed
+// glyph subsets, so preload:false is correct here.
+const notoSansJP = Noto_Sans_JP({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  preload: false,
+  display: "swap",
+  variable: "--font-noto-sans-jp",
+})
+
+const notoSansSC = Noto_Sans_SC({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  preload: false,
+  display: "swap",
+  variable: "--font-noto-sans-sc",
+})
+
+const zenKaku = Zen_Kaku_Gothic_New({
+  weight: ["700", "900"],
+  subsets: ["latin"],
+  preload: false,
+  display: "swap",
+  variable: "--font-zen-kaku",
 })
 
 export const metadata: Metadata = {
@@ -55,13 +82,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const locale = await getLocale()
+
   return (
-    <html suppressHydrationWarning className={inter.variable}>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${inter.variable} ${notoSansJP.variable} ${notoSansSC.variable} ${zenKaku.variable} scroll-smooth`}
+    >
       <body className="min-h-screen bg-background text-foreground font-sans">
         <Providers>
           {children}

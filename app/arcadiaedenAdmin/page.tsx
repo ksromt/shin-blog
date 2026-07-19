@@ -142,7 +142,7 @@ export default function AdminPage() {
         <Card>
           <CardContent className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
               <p>正在验证权限... / Verifying permissions...</p>
             </div>
           </CardContent>
@@ -183,7 +183,7 @@ export default function AdminPage() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-red-600">
+            <CardTitle className="text-2xl text-center text-destructive">
               访问被拒绝 / Access Denied
             </CardTitle>
           </CardHeader>
@@ -325,7 +325,7 @@ export default function AdminPage() {
             </div>
             <div>
               <h4 className="font-semibold">代码块 / Code Blocks:</h4>
-              <pre className="bg-gray-100 p-2 rounded mt-2">
+              <pre className="bg-muted text-foreground p-2 rounded mt-2">
 {`\`\`\`javascript
 console.log('Hello World');
 \`\`\``}

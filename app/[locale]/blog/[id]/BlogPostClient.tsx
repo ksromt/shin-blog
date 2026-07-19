@@ -19,7 +19,7 @@ export default function BlogPostClient({ postUrl }: { postUrl: string }) {
     <div className="flex items-center gap-2 mb-6">
       <span className="text-sm text-muted-foreground">{t('share')}</span>
       <Button variant="ghost" size="sm" onClick={copyLink} className="h-8 px-2">
-        {copied ? <Check className="h-4 w-4 text-green-500" /> : <Link2 className="h-4 w-4" />}
+        {copied ? <Check className="h-4 w-4 text-success animate-in zoom-in-50 duration-200" /> : <Link2 className="h-4 w-4" />}
         <span className="ml-1 text-xs">{copied ? t('copied') : t('copyLink')}</span>
       </Button>
     </div>

@@ -36,6 +36,8 @@
     "copyEmail": "复制",
     "emailCopied": "已复制！",
     "latestPosts": "最新文章",
+    "latestPostsEyebrow": "博客",
+    "viewAll": "查看全部",
     "noPostsYet": "暂无文章",
     "noPostsDescription": "文章发布后将在此显示。"
   },

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { MoonIcon, SunIcon } from "lucide-react"
@@ -33,6 +34,13 @@ export default function Navigation() {
   const { setTheme, theme } = useTheme()
   const t = useTranslations('Navigation')
 
+  // The typewriter loop is JS-driven, so the CSS reduced-motion
+  // kill switch can't stop it — gate it here instead.
+  const [reducedMotion, setReducedMotion] = useState(false)
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  }, [])
+
   const displayPath = getDisplayPath(pathname)
   const isHome = displayPath === '/'
 
@@ -43,34 +51,43 @@ export default function Navigation() {
           <div className="flex items-center justify-between text-xl font-semibold">
             {`~${displayPath}`}{" "}
             {isHome && (
-              <Typewriter
-                options={{
-                  strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
-                  autoStart: true,
-                  loop: true,
-                  delay: 75,
-                  deleteSpeed: 50
-                }}
-              />
+              reducedMotion ? (
+                <span>Welcome to my blog</span>
+              ) : (
+                <Typewriter
+                  options={{
+                    strings: ["Welcome to my blog", "Check out my projects", "Read my latest posts"],
+                    autoStart: true,
+                    loop: true,
+                    delay: 75,
+                    deleteSpeed: 50
+                  }}
+                />
+              )
             )}
           </div>
         </Link>
       </div>
       <div className="flex items-center text-base leading-5">
         <nav className="hidden sm:block mr-4">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`rounded py-1 px-2 text-foreground hover:bg-muted sm:py-2 sm:px-3 ${
-                displayPath === item.href || (item.href !== '/' && displayPath.startsWith(item.href))
-                  ? "font-medium" : "text-muted-foreground hover:text-foreground"
-              }`}
-              aria-current={displayPath === item.href ? "page" : undefined}
-            >
-              {t(item.titleKey)}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const isActive =
+              displayPath === item.href || (item.href !== '/' && displayPath.startsWith(item.href))
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative rounded py-1 px-2 transition-colors hover:bg-muted sm:py-2 sm:px-3 ${
+                  isActive
+                    ? "text-foreground after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {t(item.titleKey)}
+              </Link>
+            )
+          })}
         </nav>
         <div className="flex items-center space-x-2">
           <CommandPalette />

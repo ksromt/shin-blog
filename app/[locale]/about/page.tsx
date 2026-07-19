@@ -139,7 +139,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <div className="space-y-3">
           {achievements.map((achievement, index) => (
             <div key={index} className="flex items-start gap-3 p-3 rounded-lg border border-border">
-              <Trophy className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
+              <Trophy className="h-5 w-5 text-glow-c shrink-0 mt-0.5" />
               <span className="text-sm text-muted-foreground">{achievement}</span>
             </div>
           ))}

@@ -34,7 +34,7 @@ export default function BlogPostCard({
   const contentSnippet = stripMarkdown(content).substring(0, 150);
 
   return (
-    <div className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+    <div className="group border rounded-lg p-6 transition-all duration-200 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5 motion-safe:hover:-translate-y-1">
       <h2 className="text-2xl font-bold mb-2">
         <Link href={`/blog/${id}`} className="text-primary hover:text-primary/80">
           {title}
